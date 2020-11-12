@@ -53,8 +53,6 @@
                             <th>阅卷类型</th>
                             <th>试题总分</th>
                             <th>创建时间</th>
-                            <th>开始答题时间</th>
-                            <th>结束答题时间</th>
                         </thead>
                         <tbody class="shiti">
                         </tbody>
@@ -87,8 +85,6 @@
                     "                            <td>" + v.method + "</td>\n" +
                     "                            <td>" + v.remarks + "</td>\n" +
                     "                            <td>" + v.createTime.substring(0, 10) + "</td>\n" +
-                    "                            <td>" + v.startTime + "</td>\n" +
-                    "                            <td>" + v.stopTime + "</td>\n" +
                     "                        </tr>\n")
                 $(".shiti").append(tr);
 
