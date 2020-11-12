@@ -15,10 +15,6 @@ public class ExamPaper {
 
     private Date createTime;
 
-    private Date startTime;
-
-    private Date stopTime;
-
     public Integer getPaperid() {
         return paperid;
     }
@@ -65,21 +61,5 @@ public class ExamPaper {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getStopTime() {
-        return stopTime;
-    }
-
-    public void setStopTime(Date stopTime) {
-        this.stopTime = stopTime;
     }
 }

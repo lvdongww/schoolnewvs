@@ -312,6 +312,66 @@ public class ExamScoreExample {
             return (Criteria) this;
         }
 
+        public Criteria andPgidIsNull() {
+            addCriterion("pgid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidIsNotNull() {
+            addCriterion("pgid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidEqualTo(Integer value) {
+            addCriterion("pgid =", value, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidNotEqualTo(Integer value) {
+            addCriterion("pgid <>", value, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidGreaterThan(Integer value) {
+            addCriterion("pgid >", value, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("pgid >=", value, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidLessThan(Integer value) {
+            addCriterion("pgid <", value, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidLessThanOrEqualTo(Integer value) {
+            addCriterion("pgid <=", value, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidIn(List<Integer> values) {
+            addCriterion("pgid in", values, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidNotIn(List<Integer> values) {
+            addCriterion("pgid not in", values, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidBetween(Integer value1, Integer value2) {
+            addCriterion("pgid between", value1, value2, "pgid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPgidNotBetween(Integer value1, Integer value2) {
+            addCriterion("pgid not between", value1, value2, "pgid");
+            return (Criteria) this;
+        }
+
         public Criteria andScoreIsNull() {
             addCriterion("score is null");
             return (Criteria) this;

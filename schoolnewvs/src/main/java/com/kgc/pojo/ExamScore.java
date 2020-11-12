@@ -9,6 +9,8 @@ public class ExamScore {
 
     private Integer paperid;
 
+    private Integer pgid;
+
     private Integer score;
 
     private Integer rights;
@@ -16,19 +18,6 @@ public class ExamScore {
     private Integer errors;
 
     private Date subtime;
-
-    @Override
-    public String toString() {
-        return "ExamScore{" +
-                "scoreid=" + scoreid +
-                ", userid=" + userid +
-                ", paperid=" + paperid +
-                ", score=" + score +
-                ", rights=" + rights +
-                ", errors=" + errors +
-                ", subtime=" + subtime +
-                '}';
-    }
 
     public ExamScore() {
     }
@@ -41,6 +30,7 @@ public class ExamScore {
         this.rights = rights;
         this.errors = errors;
     }
+
 
     public Integer getScoreid() {
         return scoreid;
@@ -64,6 +54,14 @@ public class ExamScore {
 
     public void setPaperid(Integer paperid) {
         this.paperid = paperid;
+    }
+
+    public Integer getPgid() {
+        return pgid;
+    }
+
+    public void setPgid(Integer pgid) {
+        this.pgid = pgid;
     }
 
     public Integer getScore() {

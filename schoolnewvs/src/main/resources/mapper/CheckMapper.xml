@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kgc.mapper.CheckMapper" >
+  <resultMap id="BaseResultMap" type="com.kgc.pojo.Check" >
+    <id column="chid" property="chid" jdbcType="INTEGER" />
+    <result column="aid" property="aid" jdbcType="INTEGER" />
+    <result column="signindate" property="signindate" jdbcType="TIMESTAMP" />
+    <result column="signoutdate" property="signoutdate" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="chtype" property="chtype" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    chid, aid, signindate, signoutdate, remark, chtype
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kgc.pojo.CheckExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from check
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from check
+    where chid = #{chid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from check
+    where chid = #{chid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kgc.pojo.CheckExample" >
+    delete from check
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kgc.pojo.Check" >
+    insert into check (chid, aid, signindate, 
+      signoutdate, remark, chtype
+      )
+    values (#{chid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{signindate,jdbcType=TIMESTAMP}, 
+      #{signoutdate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{chtype,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kgc.pojo.Check" >
+    insert into check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="chid != null" >
+        chid,
+      </if>
+      <if test="aid != null" >
+        aid,
+      </if>
+      <if test="signindate != null" >
+        signindate,
+      </if>
+      <if test="signoutdate != null" >
+        signoutdate,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="chtype != null" >
+        chtype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="chid != null" >
+        #{chid,jdbcType=INTEGER},
+      </if>
+      <if test="aid != null" >
+        #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="signindate != null" >
+        #{signindate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signoutdate != null" >
+        #{signoutdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="chtype != null" >
+        #{chtype,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kgc.pojo.CheckExample" resultType="java.lang.Integer" >
+    select count(*) from check
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update check
+    <set >
+      <if test="record.chid != null" >
+        chid = #{record.chid,jdbcType=INTEGER},
+      </if>
+      <if test="record.aid != null" >
+        aid = #{record.aid,jdbcType=INTEGER},
+      </if>
+      <if test="record.signindate != null" >
+        signindate = #{record.signindate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.signoutdate != null" >
+        signoutdate = #{record.signoutdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chtype != null" >
+        chtype = #{record.chtype,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update check
+    set chid = #{record.chid,jdbcType=INTEGER},
+      aid = #{record.aid,jdbcType=INTEGER},
+      signindate = #{record.signindate,jdbcType=TIMESTAMP},
+      signoutdate = #{record.signoutdate,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      chtype = #{record.chtype,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kgc.pojo.Check" >
+    update check
+    <set >
+      <if test="aid != null" >
+        aid = #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="signindate != null" >
+        signindate = #{signindate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signoutdate != null" >
+        signoutdate = #{signoutdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="chtype != null" >
+        chtype = #{chtype,jdbcType=INTEGER},
+      </if>
+    </set>
+    where chid = #{chid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kgc.pojo.Check" >
+    update check
+    set aid = #{aid,jdbcType=INTEGER},
+      signindate = #{signindate,jdbcType=TIMESTAMP},
+      signoutdate = #{signoutdate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      chtype = #{chtype,jdbcType=INTEGER}
+    where chid = #{chid,jdbcType=INTEGER}
+  </update>
+</mapper>
