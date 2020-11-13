@@ -75,6 +75,11 @@
                                 <i class="iconfont">&#xe6a7;</i>
                                 <cite>自我测试</cite></a>
                         </li>
+                        <li>
+                            <a onclick="xadmin.add_tab('查看考勤','/stucalendar')">
+                                <i class="iconfont">&#xe6a7;</i>
+                                <cite>查看考勤</cite></a>
+                        </li>
                     </ul>
                 </li>
                 <li  th:if="${session.Position.getPid()==3}">
@@ -139,7 +144,7 @@
         <div id="tab_show"></div>
     </div>
 </div>
-
+<script src="../static/js/jquery-3.4.1.min.js"></script>
 <style id="theme_style"></style>
 <script>
     $(function () {
