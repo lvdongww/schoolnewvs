@@ -2,7 +2,7 @@ package com.kgc.pojo;
 
 import java.util.Date;
 
-public class Check {
+public class Checks {
     private Integer chid;
 
     private Integer aid;

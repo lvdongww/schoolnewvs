@@ -8,6 +8,7 @@ import com.kgc.pojo.*;
 import com.kgc.service.LvDongService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -372,5 +373,18 @@ public class ChitchatController {
             service.lvAddExamItems(examItems);
         }
         return "/lvkaoshi";
+    }
+    @RequestMapping("/stucalendar")
+    public String stucalendar(){
+        return "calendar";
+    }
+    @RequestMapping("/stuSelectCheck")
+    @ResponseBody
+    public Map<String,Object> stuSelectCheck(@RequestParam(defaultValue = "1")Integer aid, String firstDayont, String lastDay,HttpSession session){
+        aid=(Integer) session.getAttribute("aid");
+        Map<String,Object> map=new HashMap<>();
+        List<Checks> checks = service.lvSelectCheck(aid, firstDayont, lastDay);
+        map.put("data",checks);
+        return map;
     }
 }

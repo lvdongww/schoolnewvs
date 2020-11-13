@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kgc.mapper.CheckMapper" >
-  <resultMap id="BaseResultMap" type="com.kgc.pojo.Check" >
+<mapper namespace="com.kgc.mapper.ChecksMapper" >
+  <resultMap id="BaseResultMap" type="com.kgc.pojo.Checks" >
     <id column="chid" property="chid" jdbcType="INTEGER" />
     <result column="aid" property="aid" jdbcType="INTEGER" />
     <result column="signindate" property="signindate" jdbcType="TIMESTAMP" />
@@ -70,13 +70,13 @@
   <sql id="Base_Column_List" >
     chid, aid, signindate, signoutdate, remark, chtype
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kgc.pojo.CheckExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kgc.pojo.ChecksExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from check
+    from checks
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,29 +87,29 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from check
+    from checks
     where chid = #{chid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from check
+    delete from checks
     where chid = #{chid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kgc.pojo.CheckExample" >
-    delete from check
+  <delete id="deleteByExample" parameterType="com.kgc.pojo.ChecksExample" >
+    delete from checks
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kgc.pojo.Check" >
-    insert into check (chid, aid, signindate, 
+  <insert id="insert" parameterType="com.kgc.pojo.Checks" >
+    insert into checks (chid, aid, signindate, 
       signoutdate, remark, chtype
       )
     values (#{chid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{signindate,jdbcType=TIMESTAMP}, 
       #{signoutdate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{chtype,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.kgc.pojo.Check" >
-    insert into check
+  <insert id="insertSelective" parameterType="com.kgc.pojo.Checks" >
+    insert into checks
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="chid != null" >
         chid,
@@ -151,14 +151,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kgc.pojo.CheckExample" resultType="java.lang.Integer" >
-    select count(*) from check
+  <select id="countByExample" parameterType="com.kgc.pojo.ChecksExample" resultType="java.lang.Integer" >
+    select count(*) from checks
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update check
+    update checks
     <set >
       <if test="record.chid != null" >
         chid = #{record.chid,jdbcType=INTEGER},
@@ -184,7 +184,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update check
+    update checks
     set chid = #{record.chid,jdbcType=INTEGER},
       aid = #{record.aid,jdbcType=INTEGER},
       signindate = #{record.signindate,jdbcType=TIMESTAMP},
@@ -195,8 +195,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kgc.pojo.Check" >
-    update check
+  <update id="updateByPrimaryKeySelective" parameterType="com.kgc.pojo.Checks" >
+    update checks
     <set >
       <if test="aid != null" >
         aid = #{aid,jdbcType=INTEGER},
@@ -216,8 +216,8 @@
     </set>
     where chid = #{chid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kgc.pojo.Check" >
-    update check
+  <update id="updateByPrimaryKey" parameterType="com.kgc.pojo.Checks" >
+    update checks
     set aid = #{aid,jdbcType=INTEGER},
       signindate = #{signindate,jdbcType=TIMESTAMP},
       signoutdate = #{signoutdate,jdbcType=TIMESTAMP},

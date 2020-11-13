@@ -6,6 +6,9 @@ import com.kgc.service.LvDongService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +31,8 @@ public class LvDongServiceImpl implements LvDongService {
     ExamPaperMapper examPaperMapper;
     @Resource
     ExamItemsMapper examItemsMapper;
+    @Resource
+    ChecksMapper checksMapper;
     //添加消息
     @Override
     public int addXiaoXi(XiaoXi xiaoXi) {
@@ -191,6 +196,26 @@ public class LvDongServiceImpl implements LvDongService {
     @Override
     public int lvAddExamItems(ExamItems examItems) {
         return examItemsMapper.insertSelective(examItems);
+    }
+
+    @Override
+    public List<Checks> lvSelectCheck(int aid, String first, String last) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");//注意月份是MM
+        ChecksExample checkExample=new ChecksExample();
+        checkExample.setOrderByClause("signindate asc");
+        ChecksExample.Criteria criteria = checkExample.createCriteria();
+        Date date;
+        Date date1;
+        try {
+            date= simpleDateFormat.parse(first);
+            date1=simpleDateFormat.parse(last);
+            criteria.andAidEqualTo(aid);
+            criteria.andSignindateBetween(date,date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<Checks> checks = checksMapper.selectByExample(checkExample);
+        return checks;
     }
 
 

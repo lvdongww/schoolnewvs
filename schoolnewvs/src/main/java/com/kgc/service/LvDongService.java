@@ -47,4 +47,9 @@ public interface LvDongService {
     int lvSelectByPaper(String papername);
 
     int lvAddExamItems(ExamItems examItems);
+
+    //查询个人考勤信息
+    List<Checks> lvSelectCheck(int aid,String first,String last);
+
+
 }
