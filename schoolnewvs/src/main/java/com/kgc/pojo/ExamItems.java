@@ -1,5 +1,7 @@
 package com.kgc.pojo;
 
+import java.util.List;
+
 public class ExamItems {
     private Integer eid;
 
@@ -29,6 +31,8 @@ public class ExamItems {
 
     private ExamScoreDetail examScoreDetail;
 
+    private Integer tiNum;/*试题解析时记录题号*/
+
     @Override
     public String toString() {
         return "ExamItems{" +
@@ -46,7 +50,16 @@ public class ExamItems {
                 ", ekeys='" + ekeys + '\'' +
                 ", ehints='" + ehints + '\'' +
                 ", examScoreDetail=" + examScoreDetail +
+                ", tiNum=" + tiNum +
                 '}';
+    }
+
+    public Integer getTiNum() {
+        return tiNum;
+    }
+
+    public void setTiNum(Integer tiNum) {
+        this.tiNum = tiNum;
     }
 
     public ExamScoreDetail getExamScoreDetail() {

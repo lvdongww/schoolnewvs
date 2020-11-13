@@ -1,6 +1,7 @@
 package com.kgc.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class ExamPaper {
     private Integer paperid;
@@ -14,6 +15,16 @@ public class ExamPaper {
     private String remarks;
 
     private Date createTime;
+
+    private List<ExamScore> scoreList;
+
+    public List<ExamScore> getScoreList() {
+        return scoreList;
+    }
+
+    public void setScoreList(List<ExamScore> scoreList) {
+        this.scoreList = scoreList;
+    }
 
     public Integer getPaperid() {
         return paperid;

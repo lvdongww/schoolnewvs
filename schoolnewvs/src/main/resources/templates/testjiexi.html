@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>百度在线考试平台</title>
@@ -10,101 +10,100 @@
 <div class="container">
     <div class="panel panel-success">
         <div class="panel-heading panel-title">
-            <h1>${examPaper.papername}</h1>
+            <h1 style="text-align: center" th:text="${examPaper.papername}"></h1>
         </div>
         <div class="panel-body">
             <form action="/exam/${paperid}/result.action" method="post">
-                <c:forEach var="it" items="${items}" varStatus="v">
-                    <c:if test="${it.examScoreDetail.upoint!=0}">
-                        <div class="panel panel-success">
-                    </c:if>
-                    <c:if test="${it.examScoreDetail.upoint==0}">
-                        <div class="panel panel-danger">
-                    </c:if>
-                    <div class="panel-heading panel-title">
-                        第${v.index+1}题【 <span>${it.etype}</span>】：${it.ename}
-                    </div>
-                    <div class="panel-body col-lg-offset-1">
-                        <div class="item">
-                            <div class="radio">
-                                <input name="${it.eid}"
-                                <c:if test="${it.examScoreDetail.uanswer=='a'}">checked</c:if>
-                                value="a" type="radio">
+                <a th:each="it : ${items}">
+<div th:class="${it.examScoreDetail.upoint!=0}?'panel panel-success':'panel panel-danger'">
+                        <!--<div class="panel">-->
+                            <div  class="panel-heading panel-title "><!--1,填空; 2,判断 ;3,单选; 4,多选;5,问答-->
+                                【第<a th:text="${it.tiNum}" ></a>题
+                                <span th:if="${it.etype==1}">填空题</span>
+                                <span th:if="${it.etype==2}">判断题</span>
+                                <span th:if="${it.etype==3}">单选题</span>
+                                <span th:if="${it.etype==4}">多选题</span>
+                                <span th:if="${it.etype==5}">问答题</span>
+                                】:<a th:text="${it.ename}"></a>
                             </div>
-                            <label for="">${it.ea}</label>
-                        </div>
-                        <div class="item">
-                            <div class="radio">
-                                <input name="${it.eid}"
-                                <c:if test="${it.examScoreDetail.uanswer=='b'}">checked</c:if>
-                                value="b" type="radio">
-                            </div>
-                            <label for="">${it.eb}</label>
-                        </div>
-                        <c:if test="${it.etype!=2}">
-                            <div class="item">
-                                <div class="radio">
-                                    <input name="${it.eid}"
-                                    <c:if test="${it.examScoreDetail.uanswer=='c'}">checked</c:if>
-                                    value="c" type="radio">
+                            <div class="panel-body col-lg-offset-1" style="margin-left: 20px">
+                                <div class="item">
+                                    <div class="radio">
+                                            <input th:name="${it.eid}" th:checked="${it.examScoreDetail.uanswer=='a'}" value="a" type="radio">
+                                    </div>
+                                    <label for="" th:text="${it.ea}"></label>
                                 </div>
-                                <label for="">${it.ec}</label>
-                            </div>
-                            <div class="item">
-                                <div class="radio">
-                                    <input name="${it.eid}"
-                                    <c:if test="${it.examScoreDetail.uanswer=='d'}">checked</c:if>
-                                    value="d" type="radio">
+                                <div class="item">
+                                    <div class="radio">
+                                            <input th:abbr="${it.eid}" th:checked="${it.examScoreDetail.uanswer=='b'}"value="b" type="radio">
+                                    </div>
+                                    <label for="" th:text="${it.eb}"></label>
                                 </div>
-                                <label for="">${it.ed}</label>
+                                <div th:if="${it.etype!=2}" class="item">
+                                        <div class="radio">
+                                            <input name="${it.eid}" th:checked="${it.examScoreDetail.uanswer=='c'}" value="c" type="radio">
+                                        </div>
+                                        <label for="" th:text="${it.ec}"></label>
+                                    </div>
+                                    <div th:if="${it.etype!=2}" class="item">
+                                        <div class="radio">
+                                            <input name="${it.eid}" th:checked="${it.examScoreDetail.uanswer=='d'}" value="d" type="radio">
+                                        </div>
+                                        <label for="" th:text="${it.ed}"></label>
+                                    </div>
+                                </th:if>
+
+                                <div class="row">
+                                    <hr/>
+                                    <a th:if=${it.examScoreDetail.upoint==0} style="color: red">我的答案:<a
+                                            th:text="${it.examScoreDetail.uanswer}" style="color: red"></a></a>
+                                    <a th:if=${it.examScoreDetail.upoint!=0}>我的答案:<a
+                                            th:text="${it.examScoreDetail.uanswer}"></a></a>
+                                    正确答案：<a th:text="${it.ekeys}"></a> &nbsp;
+                                    实际得分：<a th:text="${it.examScoreDetail.upoint}"></a> &nbsp;
+                                    试题解析：<a th:text="${it.ehints}"></a> &nbsp;
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <a th:if="${it.examScoreDetail.upoint!=0}">
+                                        <img src="/static/imgs/error.jpg" alt="" height="23px" width="25px">
+                                    </a>
+                                    <a th:if="${it.examScoreDetail.upoint==0}">
+                                        <img src="/static/imgs/right.jpg" alt="" height="23px" width="25px">
+                                    </a>
+
+                                </div>
+
                             </div>
-                        </c:if>
-
-                        <div class="row">
-                            <hr/>
-                            <c:if test="${it.examScoreDetail.upoint==0}">
-                                <a style="color: red">我的答案：${it.examScoreDetail.uanswer}</a>
-                            </c:if>
-                            <c:if test="${it.examScoreDetail.upoint!=0}">
-                                我的答案：${it.examScoreDetail.uanswer}
-                            </c:if>
-                            正确答案：${it.ekeys} &nbsp;
-                            实际得分：${it.examScoreDetail.upoint} &nbsp;
-                            试题解析：${it.ehints} &nbsp;
-                            &nbsp; &nbsp; &nbsp; &nbsp;
-                            <c:if test="${it.examScoreDetail.upoint!=0}">
-                                <img src="/static/imgs/error.jpg" alt="" height="23px" width="25px">
-                            </c:if>
-                            <c:if test="${it.examScoreDetail.upoint==0}">
-                                <img src="/static/imgs/right.jpg" alt="" height="23px" width="25px">
-                            </c:if>
-
                         </div>
-
-                    </div>
+                </a>
+                <a href="/jsp/stukaoshi.jsp" class="btn btn-success btn-block">返回我的试卷</a>
+            </form>
         </div>
-        </c:forEach>
-        <a href="/jsp/stukaoshi.jsp" class="btn btn-success btn-block">返回我的试卷</a>
-        </form>
+        <center>
+            <p>
+        我的得分：<a th:text="${examScore.score}"></a> &nbsp;
+        <a style="color: greenyellow">对题数：<a style="color: greenyellow" th:text="${examScore.rights}"></a> &nbsp;</a>
+        <a style="color:red;">错题数：<a style="color:red;" th:text="${examScore.errors}"></a> &nbsp;</a>
+            </p>
+        </center>
+        <div class="panel-footer text-right">
+            课工场在线考试平台
+        </div>
     </div>
-    <div class="panel-footer text-right">
-        课工场在线考试平台
-    </div>
-</div>
 </div>
 </body>
-<script>
-    <!--1,填空; 2,判断 ;3,单选; 4,多选;5,问答-->
-    $(function () {
-        var d = document.getElementsByTagName("span");
-        for (var i = 0; i < d.length; i++) {
-            if (d[i].textContent == 2) {
-                d[i].textContent = "判断题";
-            } else {
-                d[i].textContent = "单选题";
+<script type="text/javascript">
+
+    /*    <!--1,填空; 2,判断 ;3,单选; 4,多选;5,问答-->
+        $(function () {
+            var d = document.getElementsByTagName("span");
+            for (var i = 0; i < d.length; i++) {
+                if (d[i].textContent == 2) {
+                    d[i].textContent = "判断题";
+                } else {
+                    d[i].textContent = "单选题";
+                }
             }
-        }
-    })
+        })*/
 </script>
 
 </html>

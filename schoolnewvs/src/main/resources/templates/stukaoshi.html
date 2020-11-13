@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>欢迎页面-X-admin2.2</title>
+    <title>KGC题库</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -48,8 +48,6 @@
                         <th>试题名称</th>
                         <th>试题类型</th>
                         <th>试题总分</th>
-                        <th>开始答题时间</th>
-                        <th>结束答题时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -57,6 +55,18 @@
 
                     </tbody>
                 </table>
+                <center>
+                    <div class="layui-card-body ">
+                        <div class="page">
+                            <div>
+                                <a class="num" href="javascript:void(0)" onclick="shou()">首页</a>
+                                <a class="prev" href="javascript:void(0)" onclick="shang()">&lt;&lt;</a>
+                                <span class="current ye">2</span>
+                                <a class="next" href="javascript:void(0)" onclick="xia()">&gt;&gt;</a>
+                                <a class="num" href="javascript:void(0)" onclick="wei()">尾页</a></div>
+                        </div>
+                    </div>
+                </center>
             </div>
         </div>
     </div>
@@ -66,47 +76,93 @@
 
 <script>
     $(function () {
-        fenye();
+        aj();
     })
-    var pageIndex = 1;
+    var pageInfo;
+    var pageNum = 1;
     var pageSize = 5;
-
-    function fenye() {
-        var json = {
-            pageIndex: pageIndex,
-            pageSize: pageSize
+    function shou() {
+        if (pageInfo.isFirstPage == false) {
+            pageNum=1;
+            aj();
         }
-        $.post("/loSelectPaper", json, function (data) {
-            console.log(data.data.list)
-            $.each(data.data.list, function (i, v) {
-                var tr = $(" <tr style='text-align: center'>\n" +
-                    "                            <td>" + v.paperid + "</td>\n" +
-                    "                            <td>" + v.papername + "</td>\n" +
-                    "                            <td>" + v.papertype + "</td>\n" +
-                    /* "                            <td>"+v.method+"</td>\n" +*/
-                    "                            <td>" + v.remarks + "</td>\n" +
-                    /*"                            <td>"+v.createTime.substring(0,10)+"</td>\n" +*/
-                    "                            <td>" + v.startTime + "</td>\n" +
-                    "                            <td>" + v.stopTime + "</td>\n" +
-                    "                            <td class=\"td-manage\" id='zong" + v.paperid + "'>\n" +
-                    "                                \n" +
-                    "                            </td>\n" +
-                    "                        </tr>\n")
-                $(".shiti").append(tr);
-                $.post("/chazuo", {id: v.paperid}, function (result) {
-                    if (result.status == true) {
-
-                        var b = $("<button id='da" + v.paperid + "' onclick='zuoti(" + v.paperid + ")' class='btn layui-btn'>开始答题</button>")
-                        $("#zong" + v.paperid).append(b)
-                    } else {
-                        var b = $("<button id='da" + v.paperid + "' onclick='jiexi(" + v.paperid + ")' class='btn layui-btn layui-btn-primary'>查看解析</button>")
-                        $("#zong" + v.paperid).append(b)
-                    }
-                }, "json")
-            })
-        }, "json")
     }
 
+    function shang() {
+        if(pageInfo.hasPreviousPage){
+            pageNum=pageInfo.prePage;
+            aj();
+        }
+    }
+
+    function xia() {
+        if(pageInfo.hasNextPage){
+            pageNum=pageInfo.nextPage;
+            aj();
+        }
+    }
+
+    function wei() {
+        if(pageInfo.isLastPage==false){
+            pageNum=pageInfo.lastPage;
+            aj();
+        }
+    }
+
+    function aj() {
+        $(".bian").remove();
+        var json = {
+            pageNum: pageNum,
+            pageSize: pageSize,
+        }
+        $.ajax({
+            url: "/loSelectTiKu",
+            type: "POST",
+            data: json,
+            dataType: "json",
+            success: function (result) {
+                $(".ye").text(result.data.pageNum+"/"+result.data.pages);
+                pageInfo = result.data;
+                $.each(result.data.list, function (i, v) {
+                    var tr = $(" <tr class='bian' style='text-align: center'>\n" +
+                        "                            <td>" + v.paperid + "</td>\n" +
+                        "                            <td>" + v.papername + "</td>\n" +
+                        "                            <td>" + v.papertype + "</td>\n" +
+                        /* "                            <td>"+v.method+"</td>\n" +*/
+                        "                            <td>" + v.remarks + "</td>\n" +
+                        /*"                            <td>"+v.createTime.substring(0,10)+"</td>\n" +*/
+                        "                            <td class=\"td-manage\" id='zong" + v.paperid + "'>\n" +
+                        "                                \n" +
+                        "                            </td>\n" +
+                        "                        </tr>\n")
+                    $(".shiti").append(tr);
+                    $.post("/chazuo", {id: v.paperid}, function (result) {
+                        if (result.status == true) {
+                            var b = $("<button id='da" + v.paperid + "' onclick='zuoti(" + v.paperid + ")' class='btn layui-btn'>开始答题</button>")
+                            var b1 = $("<button id='da\" + v.paperid + \"' onclick='weizuo()'  class='btn layui-btn layui-btn-danger'>做题记录</button>");
+                            $("#zong" + v.paperid).append(b)
+                            $("#zong" + v.paperid).append(b1)
+                        } else {
+                            var b1 = $("<button id='da" + v.paperid + "' onclick='zuoti(" + v.paperid + ")' class='btn layui-btn'>开始答题</button>")
+                            var b = $("<button id='da\" + v.paperid + \"' onclick='toDoWorkHistory("+v.paperid+")'  class='btn layui-btn layui-btn-primary'>做题记录</button>");
+                            $("#zong" + v.paperid).append(b1);
+                            $("#zong" + v.paperid).append(b);
+                        }
+                    }, "json")
+                })
+            }
+        },"json")
+
+    }
+   function toDoWorkHistory(id) {
+        $.post("/toDoWorkHistoryChuanZhi",{paperid:id},function (result) {
+            xadmin.open('做题历史记录', '/toDoWorkHistory', 1200, 700)
+        })
+
+   }
+    function weizuo() {
+        alert("您还未做过该试题");
+    }
 
     function zuoti(id) {
         location.href = "/stushijuan?id=" + id

@@ -19,6 +19,16 @@ public class ExamScore {
 
     private Date subtime;
 
+    private ExamPaper examPaper;
+
+    public ExamPaper getExamPaper() {
+        return examPaper;
+    }
+
+    public void setExamPaper(ExamPaper examPaper) {
+        this.examPaper = examPaper;
+    }
+
     public ExamScore() {
     }
 

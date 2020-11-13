@@ -33,4 +33,5 @@ public interface LoService {
     List<ExamPaper> loSelectPaper();//查询试卷
     List<ExamScore> selectByUserIdAndPaperIdl(int userid, int paperid);//通过用户id和试题id查找相对应的成绩
     UserInfo uiselectByUserId(int id);//根据用户id查找userinfo中的信息
+    List<ExamScore> selectByUserIdAndPaperIdAndPaperUserInfo(int userid, int paperid);//通过用户id和试题id查找相对应的成绩和试卷信息
 }

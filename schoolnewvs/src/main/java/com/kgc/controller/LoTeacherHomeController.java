@@ -279,11 +279,12 @@ public class LoTeacherHomeController {
         for (int i = 0; i < examItems.size(); i++) {
             ExamScoreDetail examScoreDetail = loService.selectByUseridAndScoreid(examItems.get(i).getEid(), examScore.getScoreid());
             examItems.get(i).setExamScoreDetail(examScoreDetail);
+            examItems.get(i).setTiNum(i+1);
             list.add(examScoreDetail);
         }
-        model.addAttribute("items", examItems);
-        model.addAttribute("examScore", examScore);
-        model.addAttribute("examPaper",examPaper);
+        model.addAttribute("items", examItems);/*查询所有试题*/
+        model.addAttribute("examScore", examScore);/*查询这个考试score表里的信息*/
+        model.addAttribute("examPaper",examPaper);/*查询该试题的信息*/
         return "testjiexi";
     }
     @RequestMapping("/score")
@@ -318,6 +319,49 @@ public class LoTeacherHomeController {
         }
         return map;
     }
+
+    /*完善*/
+    @RequestMapping("/loSelectTiKu")
+    @ResponseBody
+    public Map<String,Object> loSelectTiKu(Integer pageNum,Integer pageSize,HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        int userid=(int)session.getAttribute("aid");/*获取当前用户id*/
+        PageHelper.startPage(pageNum,pageSize);
+        List<ExamPaper> examPapers = loService.loSelectPaper();/*读取题库里的所有信息*/
+
+        for (ExamPaper examPaper : examPapers) {
+            List<ExamScore> examScores = loService.selectByUserIdAndPaperIdl(userid, examPaper.getPaperid());
+            examPaper.setScoreList(examScores);
+        }
+        PageInfo<ExamPaper> pageInfo=new PageInfo<>(examPapers);
+        map.put("data",pageInfo);
+        return map;
+    }
+    @RequestMapping("/toDoWorkHistory")/*跳转查询历史做题记录页面*/
+    public String toDoWorkHistory(){
+        return "stuDoWorkHistory";
+    }
+    @RequestMapping("/toDoWorkHistoryChuanZhi")/*接收试卷的值*/
+    @ResponseBody
+    public Map<String,Object> toDoWorkHistoryChuanZhi(int paperid,HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        session.setAttribute("HistoryPaperId",paperid);
+        map.put("status",true);
+        return map;
+    }
+    @RequestMapping("/chaDoWorkHistoryChuanZhi")/*查询接收过来试卷值的历史做题记录*/
+    @ResponseBody
+    public Map<String,Object> chaDoWorkHistoryChuanZhi(Integer pageNum,Integer pageSize,HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        int parperid=(int)session.getAttribute("HistoryPaperId");
+        int userid=(int)session.getAttribute("aid");
+        List<ExamScore> examScores = loService.selectByUserIdAndPaperIdAndPaperUserInfo(userid, parperid);
+        PageHelper.startPage(pageNum,pageSize);
+        PageInfo<ExamScore> pageInfo=new PageInfo<>(examScores);
+        map.put("data",pageInfo);
+        return map;
+    }
+
     /*跳转页面*/
     @RequestMapping("/toshujutongji")
     public String toshujutongji(){
@@ -342,5 +386,12 @@ public class LoTeacherHomeController {
     @RequestMapping("/toaddshijuan")
     public String toaddshijuan(){
         return "lvaddkaoshi";
+    }
+
+
+    /*测试*/
+    @RequestMapping("/tostukaoshi")
+    public String tostukaoshi(){
+        return "stukaoshi";
     }
 }

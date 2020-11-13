@@ -246,4 +246,18 @@ public class LoServiceImpl implements LoService {
         List<ExamScore> examScores = examScoreMapper.selectByExample(example);
         return examScores;
     }
+    @Override
+    public List<ExamScore> selectByUserIdAndPaperIdAndPaperUserInfo(int userid, int paperid) {
+        ExamScoreExample example=new ExamScoreExample();
+        example.setOrderByClause("scoreid desc");
+        ExamScoreExample.Criteria criteria = example.createCriteria();
+        criteria.andUseridEqualTo(userid);
+        criteria.andPaperidEqualTo(paperid);
+        List<ExamScore> examScores = examScoreMapper.selectByExample(example);
+        for (ExamScore examScore : examScores) {
+            ExamPaper examPaper = loService.selectById(examScore.getPaperid());
+            examScore.setExamPaper(examPaper);
+        }
+        return examScores;
+    }
 }
