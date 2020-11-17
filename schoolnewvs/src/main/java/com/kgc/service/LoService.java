@@ -37,5 +37,6 @@ public interface LoService {
     GradeUser selectGradeUserByUserId(int userid);/*查询该用户属于内个班级*/
     List<PaperGrade> selectPGByGradeId(int gradeid);//根据班级id查询老师发布的任务
     Grade selcetByGradeId(int gradeid);//根据班级id查找班级
+    ExamScore selectByUserIdPaperIdPgid(Integer userid,Integer paperid,Integer pgid);//根据userid paperid pgid 查找ExamScore中对应的数据
 
 }

@@ -16,6 +16,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.jws.WebParam;
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -396,7 +397,25 @@ public class LoTeacherHomeController {
         model.addAttribute("examPaper", examPaper);/*查询该试题的信息*/
         return "testjiexi";
     }
-
+    @RequestMapping("/chajiexiwei")/*没有提前获取id(试卷)的时候*/
+    public String chajiexiwei(Integer id,HttpSession session, Model model) {
+        int aid = (int) session.getAttribute("aid");
+        int papergrade=(int) session.getAttribute("papergrade");
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,papergrade);
+        List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
+        ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
+        List<ExamScoreDetail> list = new ArrayList<>();
+        for (int i = 0; i < examItems.size(); i++) {
+            ExamScoreDetail examScoreDetail = loService.selectByUseridAndScoreid(examItems.get(i).getEid(), examScore.getScoreid());
+            examItems.get(i).setExamScoreDetail(examScoreDetail);
+            examItems.get(i).setTiNum(i + 1);
+            list.add(examScoreDetail);
+        }
+        model.addAttribute("items", examItems);/*查询所有试题*/
+        model.addAttribute("examScore", examScore);/*查询这个考试score表里的信息*/
+        model.addAttribute("examPaper", examPaper);/*查询该试题的信息*/
+        return "testjiexi";
+    }
     @RequestMapping("/score")
     public String score(Model model, HttpSession session) {
         int aid = (int) session.getAttribute("aid");
@@ -483,7 +502,7 @@ public class LoTeacherHomeController {
     public String banjiceshi(HttpSession session) {
         int userid = (int) session.getAttribute("aid");
         GradeUser gradeUser = loService.selectGradeUserByUserId(userid);/*根据用户id查找属于内个班级*/
-        Grade gradeuserinfo = loService.selcetByGradeId(gradeUser.getGuid());//根据班级id查找详细信息
+        Grade gradeuserinfo = loService.selcetByGradeId(gradeUser.getGradeid());//根据班级id查找详细信息
         session.setAttribute("gradeuserinfo", gradeuserinfo);
         return "gradekaoshi";
     }
@@ -495,7 +514,7 @@ public class LoTeacherHomeController {
         int userid = (int) session.getAttribute("aid");
         GradeUser gradeUser = loService.selectGradeUserByUserId(userid);/*根据用户id查找属于内个班级*/
         Grade gradeuserinfo = loService.selcetByGradeId(gradeUser.getGuid());//根据班级id查找详细信息
-        List<PaperGrade> paperGrade = loService.selectPGByGradeId(gradeUser.getGuid());/*查询该班级下所有的题*/
+        List<PaperGrade> paperGrade = loService.selectPGByGradeId(gradeUser.getGradeid());/*查询该班级下所有的题*/
         List<ExamPaper> zong = new ArrayList<>();/*记录所有的题的详细信息*/
         PageHelper.startPage(pageNum, pageSize);
         map.put("status", false);
@@ -509,6 +528,19 @@ public class LoTeacherHomeController {
         }
         PageInfo<ExamPaper> pageInfo = new PageInfo<>(zong);
         map.put("data", pageInfo);
+        return map;
+    }
+    @RequestMapping("/gradetestpanduan")
+    @ResponseBody
+    public Map<String,Object> gradetestpanduan(HttpSession session,Integer paperid,Integer pgid){
+        Map<String,Object> map=new HashMap<>();
+        int userid=(int)session.getAttribute("aid");
+        ExamScore examScore = loService.selectByUserIdPaperIdPgid(userid, paperid, pgid);
+        if(examScore!=null){
+            map.put("status",false);
+        }else{
+            map.put("status",true);
+        }
         return map;
     }
 

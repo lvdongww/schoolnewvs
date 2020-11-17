@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>KGC题库</title>
@@ -37,7 +37,7 @@
                         <div class="layui-input-inline layui-show-xs-block">
                         </div>
                         <div class="layui-input-inline layui-show-xs-block">
-                            <button class="layui-btn" th:text="${session.gradeuserinfo.gname}"></button>
+                            <button class="layui-btn" id="banjimingzi" th:text="${session.gradeuserinfo.gname}"></button>
                         </div>
                     </form>
                 </div>
@@ -77,6 +77,9 @@
 <form action="/stushijuan" method="post" id="doshijuan">
     <input type="hidden" id="shijuan" name="id">
     <input type="hidden" id="papergrade" name="papergrade" >
+</form>
+<form action="/chajiexiwei" id="chajiexishijuan" method="post" >
+    <input type="hidden" id="jiexishijuan" name="id">
 </form>
 </body>
 <script type="text/javascript">
@@ -123,6 +126,31 @@
             /*            window.close();
                         window.open("/stushijuan?id=" + id)*/
         }
+    }
+    function chakanjiexi(stop,shijuanid) {
+        /* var date1=new Date("2020/12/30"); //2010年12月31日0时bai0分0秒*/
+        var xianzai = new Date(); //此时的日期
+        var jieshu = new Date(Date.parse(stop.replace(/-/g, "/")));
+        /*alert("现在的日期是："+date1);*/
+        var pan = 0;//1.可做 2.过早 3.过时
+        var fanhui=0;
+        if (xianzai.getTime() - jieshu.getTime() < 0) {
+            //alert("只有等考试结束才能查看该题的解析")
+            fanhui=1
+        } else if (xianzai.getTime() - jieshu.getTime() > 0) {
+           /*$("#"+shijuanid).text("查看解析")
+           $("#jiexishijuan").val(shijuanid);
+           $("#chajiexishijuan").submit();*/
+           fanhui=2
+        }
+        return fanhui;
+    }
+    function chakanshijuandejiexi(shijuanid) {
+        $("#jiexishijuan").val(shijuanid);
+        $("#chajiexishijuan").submit();
+    }
+    function weidaoshijian() {
+        alert("只有等考试结束才能查看该题的解析")
     }
 </script>
 
@@ -180,9 +208,17 @@
                     pageInfo = result.data;
                     $.each(result.data.list, function (i, v) {
                         var panduan;
-                        var zhi = count(v.paperGrade.startTime, v.paperGrade.stopTime);//1.可做 2.过早 3.过时
+                        var zhi = count(v.paperGrade.startTime, v.paperGrade.stopTime);//1.可做 2.过早 3.过时 4.做过
+                        var json={
+                            paperid:v.paperid,
+                            pgid:v.paperGrade.pgid
+                        }
+                        var banjimingzi=$("#banjimingzi").text();
+                        var mingzi=v.paperGrade.startTime.substring(5,10);
+                        var zongmingzi=banjimingzi+"\t\t"+mingzi+"测试"
+                        //alert(mingzi)
                         var tr = $(" <tr class='bian' style='text-align: center'>\n" +
-                            "                            <td>" + v.papername + "</td>\n" +
+                            "                            <td>" + zongmingzi + "</td>\n" +
                             "                            <td>" + v.papertype + "</td>\n" +
                             "                            <td>" + v.remarks + "</td>\n" +
                             "                            <td>" + v.paperGrade.startTime + "</td>\n" +
@@ -192,19 +228,40 @@
                             "                            </td>\n" +
                             "                        </tr>\n")
                         $(".shiti").append(tr);
-                        if (zhi == 1) {
-                            $("#" + v.paperid).text("开始做题")
-                            $("#" + v.paperid).attr("class", "layui-btn ");
-                            $("#" + v.paperid).attr("onclick", "zuihoupan('" + v.paperGrade.startTime + "','" + v.paperGrade.stopTime + "','" + v.paperid + "','" + v.paperGrade.pgid + "')")
-                        } else if (zhi == 2) {
-                            $("#" + v.paperid).text("时间过早")
-                            $("#" + v.paperid).attr("class", "layui-btn layui-btn-disabled");
-                            $("#" + v.paperid).attr("onclick", "guozao()")
-                        } else if (zhi == 3) {
-                            $("#" + v.paperid).text("时间过晚")
-                            $("#" + v.paperid).attr("class", "layui-btn layui-btn-disabled");
-                            $("#" + v.paperid).attr("onclick", "guowan()")
-                        }
+                        $.post("/gradetestpanduan",json,function (result) {
+                            if(result.status==false){
+                                //alert("做过")
+                                //zhi=4;//做过
+                                //alert("zhi"+zhi)
+                                var fanhui=chakanjiexi( v.paperGrade.stopTime ,  v.paperid);
+                                //alert("fanhui"+fanhui)
+                                if(fanhui==1){
+                                    $("#" + v.paperid).text("您已经完成该试题")
+                                    $("#" + v.paperid).attr("class", "layui-btn layui-btn-disabled");
+                                    $("#" + v.paperid).attr("onclick", "weidaoshijian()")
+                                }else if(fanhui==2){
+                                    $("#" + v.paperid).text("查看解析")
+                                    $("#" + v.paperid).attr("class", "layui-btn ");
+                                    $("#" + v.paperid).attr("onclick", "chakanshijuandejiexi('"+v.paperid+"')")
+                                }
+                            }else{
+                                //alert("没做过")
+                                if (zhi == 1) {
+                                    $("#" + v.paperid).text("开始做题")
+                                    $("#" + v.paperid).attr("class", "layui-btn ");
+                                    $("#" + v.paperid).attr("onclick", "zuihoupan('" + v.paperGrade.startTime + "','" + v.paperGrade.stopTime + "','" + v.paperid + "','" + v.paperGrade.pgid + "')")
+                                } else if (zhi == 2) {
+                                    $("#" + v.paperid).text("时间过早")
+                                    $("#" + v.paperid).attr("class", "layui-btn layui-btn-disabled");
+                                    $("#" + v.paperid).attr("onclick", "guozao()")
+                                } else if (zhi == 3) {
+                                    $("#" + v.paperid).text("时间过晚")
+                                    $("#" + v.paperid).attr("class", "layui-btn layui-btn-disabled");
+                                    $("#" + v.paperid).attr("onclick", "guowan()")
+                                }
+                            }
+                        },"json")
+
                     })
                 } else {
                     $("#msg").text("您的老师还没有布置作业")

@@ -298,4 +298,20 @@ public class LoServiceImpl implements LoService {
     public Grade selcetByGradeId(int gradeid) {
         return gradeMapper.selectByPrimaryKey(gradeid);
     }
+
+    @Override
+    public ExamScore selectByUserIdPaperIdPgid(Integer userid, Integer paperid, Integer pgid) {
+        ExamScoreExample example=new ExamScoreExample();
+        ExamScoreExample.Criteria criteria = example.createCriteria();
+        criteria.andUseridEqualTo(userid);
+        criteria.andPaperidEqualTo(paperid);
+        criteria.andPgidEqualTo(pgid);
+        List<ExamScore> examScores = examScoreMapper.selectByExample(example);
+        if(examScores.size()!=0){
+            return examScores.get(0);
+        }else{
+            return null;
+        }
+
+    }
 }
