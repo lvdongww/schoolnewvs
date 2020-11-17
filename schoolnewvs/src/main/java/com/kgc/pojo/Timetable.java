@@ -1,17 +1,13 @@
 package com.kgc.pojo;
 
-import java.util.Date;
-
 public class Timetable {
     private Integer tid;
 
     private Integer gid;
 
-    private Date tsignindate;
+    private String tsignindate;
 
-    private Date tsignoutdate;
-
-    private String rest;
+    private String tsignoutdate;
 
     public Integer getTid() {
         return tid;
@@ -29,27 +25,19 @@ public class Timetable {
         this.gid = gid;
     }
 
-    public Date getTsignindate() {
+    public String getTsignindate() {
         return tsignindate;
     }
 
-    public void setTsignindate(Date tsignindate) {
-        this.tsignindate = tsignindate;
+    public void setTsignindate(String tsignindate) {
+        this.tsignindate = tsignindate == null ? null : tsignindate.trim();
     }
 
-    public Date getTsignoutdate() {
+    public String getTsignoutdate() {
         return tsignoutdate;
     }
 
-    public void setTsignoutdate(Date tsignoutdate) {
-        this.tsignoutdate = tsignoutdate;
-    }
-
-    public String getRest() {
-        return rest;
-    }
-
-    public void setRest(String rest) {
-        this.rest = rest == null ? null : rest.trim();
+    public void setTsignoutdate(String tsignoutdate) {
+        this.tsignoutdate = tsignoutdate == null ? null : tsignoutdate.trim();
     }
 }

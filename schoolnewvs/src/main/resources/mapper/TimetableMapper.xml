@@ -4,9 +4,8 @@
   <resultMap id="BaseResultMap" type="com.kgc.pojo.Timetable" >
     <id column="tid" property="tid" jdbcType="INTEGER" />
     <result column="gid" property="gid" jdbcType="INTEGER" />
-    <result column="tsignindate" property="tsignindate" jdbcType="TIMESTAMP" />
-    <result column="tsignoutdate" property="tsignoutdate" jdbcType="TIMESTAMP" />
-    <result column="rest" property="rest" jdbcType="VARCHAR" />
+    <result column="tsignindate" property="tsignindate" jdbcType="VARCHAR" />
+    <result column="tsignoutdate" property="tsignoutdate" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    tid, gid, tsignindate, tsignoutdate, rest
+    tid, gid, tsignindate, tsignoutdate
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kgc.pojo.TimetableExample" >
     select
@@ -101,9 +100,9 @@
   </delete>
   <insert id="insert" parameterType="com.kgc.pojo.Timetable" >
     insert into timetable (tid, gid, tsignindate, 
-      tsignoutdate, rest)
-    values (#{tid,jdbcType=INTEGER}, #{gid,jdbcType=INTEGER}, #{tsignindate,jdbcType=TIMESTAMP}, 
-      #{tsignoutdate,jdbcType=TIMESTAMP}, #{rest,jdbcType=VARCHAR})
+      tsignoutdate)
+    values (#{tid,jdbcType=INTEGER}, #{gid,jdbcType=INTEGER}, #{tsignindate,jdbcType=VARCHAR}, 
+      #{tsignoutdate,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.kgc.pojo.Timetable" >
     insert into timetable
@@ -120,9 +119,6 @@
       <if test="tsignoutdate != null" >
         tsignoutdate,
       </if>
-      <if test="rest != null" >
-        rest,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="tid != null" >
@@ -132,13 +128,10 @@
         #{gid,jdbcType=INTEGER},
       </if>
       <if test="tsignindate != null" >
-        #{tsignindate,jdbcType=TIMESTAMP},
+        #{tsignindate,jdbcType=VARCHAR},
       </if>
       <if test="tsignoutdate != null" >
-        #{tsignoutdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="rest != null" >
-        #{rest,jdbcType=VARCHAR},
+        #{tsignoutdate,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -158,13 +151,10 @@
         gid = #{record.gid,jdbcType=INTEGER},
       </if>
       <if test="record.tsignindate != null" >
-        tsignindate = #{record.tsignindate,jdbcType=TIMESTAMP},
+        tsignindate = #{record.tsignindate,jdbcType=VARCHAR},
       </if>
       <if test="record.tsignoutdate != null" >
-        tsignoutdate = #{record.tsignoutdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.rest != null" >
-        rest = #{record.rest,jdbcType=VARCHAR},
+        tsignoutdate = #{record.tsignoutdate,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -175,9 +165,8 @@
     update timetable
     set tid = #{record.tid,jdbcType=INTEGER},
       gid = #{record.gid,jdbcType=INTEGER},
-      tsignindate = #{record.tsignindate,jdbcType=TIMESTAMP},
-      tsignoutdate = #{record.tsignoutdate,jdbcType=TIMESTAMP},
-      rest = #{record.rest,jdbcType=VARCHAR}
+      tsignindate = #{record.tsignindate,jdbcType=VARCHAR},
+      tsignoutdate = #{record.tsignoutdate,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -189,13 +178,10 @@
         gid = #{gid,jdbcType=INTEGER},
       </if>
       <if test="tsignindate != null" >
-        tsignindate = #{tsignindate,jdbcType=TIMESTAMP},
+        tsignindate = #{tsignindate,jdbcType=VARCHAR},
       </if>
       <if test="tsignoutdate != null" >
-        tsignoutdate = #{tsignoutdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="rest != null" >
-        rest = #{rest,jdbcType=VARCHAR},
+        tsignoutdate = #{tsignoutdate,jdbcType=VARCHAR},
       </if>
     </set>
     where tid = #{tid,jdbcType=INTEGER}
@@ -203,9 +189,8 @@
   <update id="updateByPrimaryKey" parameterType="com.kgc.pojo.Timetable" >
     update timetable
     set gid = #{gid,jdbcType=INTEGER},
-      tsignindate = #{tsignindate,jdbcType=TIMESTAMP},
-      tsignoutdate = #{tsignoutdate,jdbcType=TIMESTAMP},
-      rest = #{rest,jdbcType=VARCHAR}
+      tsignindate = #{tsignindate,jdbcType=VARCHAR},
+      tsignoutdate = #{tsignoutdate,jdbcType=VARCHAR}
     where tid = #{tid,jdbcType=INTEGER}
   </update>
 </mapper>

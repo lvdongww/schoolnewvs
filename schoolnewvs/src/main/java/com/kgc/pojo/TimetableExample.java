@@ -1,7 +1,6 @@
 package com.kgc.pojo;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TimetableExample {
@@ -235,52 +234,62 @@ public class TimetableExample {
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateEqualTo(Date value) {
+        public Criteria andTsignindateEqualTo(String value) {
             addCriterion("tsignindate =", value, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateNotEqualTo(Date value) {
+        public Criteria andTsignindateNotEqualTo(String value) {
             addCriterion("tsignindate <>", value, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateGreaterThan(Date value) {
+        public Criteria andTsignindateGreaterThan(String value) {
             addCriterion("tsignindate >", value, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateGreaterThanOrEqualTo(Date value) {
+        public Criteria andTsignindateGreaterThanOrEqualTo(String value) {
             addCriterion("tsignindate >=", value, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateLessThan(Date value) {
+        public Criteria andTsignindateLessThan(String value) {
             addCriterion("tsignindate <", value, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateLessThanOrEqualTo(Date value) {
+        public Criteria andTsignindateLessThanOrEqualTo(String value) {
             addCriterion("tsignindate <=", value, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateIn(List<Date> values) {
+        public Criteria andTsignindateLike(String value) {
+            addCriterion("tsignindate like", value, "tsignindate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTsignindateNotLike(String value) {
+            addCriterion("tsignindate not like", value, "tsignindate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTsignindateIn(List<String> values) {
             addCriterion("tsignindate in", values, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateNotIn(List<Date> values) {
+        public Criteria andTsignindateNotIn(List<String> values) {
             addCriterion("tsignindate not in", values, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateBetween(Date value1, Date value2) {
+        public Criteria andTsignindateBetween(String value1, String value2) {
             addCriterion("tsignindate between", value1, value2, "tsignindate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignindateNotBetween(Date value1, Date value2) {
+        public Criteria andTsignindateNotBetween(String value1, String value2) {
             addCriterion("tsignindate not between", value1, value2, "tsignindate");
             return (Criteria) this;
         }
@@ -295,123 +304,63 @@ public class TimetableExample {
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateEqualTo(Date value) {
+        public Criteria andTsignoutdateEqualTo(String value) {
             addCriterion("tsignoutdate =", value, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateNotEqualTo(Date value) {
+        public Criteria andTsignoutdateNotEqualTo(String value) {
             addCriterion("tsignoutdate <>", value, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateGreaterThan(Date value) {
+        public Criteria andTsignoutdateGreaterThan(String value) {
             addCriterion("tsignoutdate >", value, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateGreaterThanOrEqualTo(Date value) {
+        public Criteria andTsignoutdateGreaterThanOrEqualTo(String value) {
             addCriterion("tsignoutdate >=", value, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateLessThan(Date value) {
+        public Criteria andTsignoutdateLessThan(String value) {
             addCriterion("tsignoutdate <", value, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateLessThanOrEqualTo(Date value) {
+        public Criteria andTsignoutdateLessThanOrEqualTo(String value) {
             addCriterion("tsignoutdate <=", value, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateIn(List<Date> values) {
+        public Criteria andTsignoutdateLike(String value) {
+            addCriterion("tsignoutdate like", value, "tsignoutdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTsignoutdateNotLike(String value) {
+            addCriterion("tsignoutdate not like", value, "tsignoutdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTsignoutdateIn(List<String> values) {
             addCriterion("tsignoutdate in", values, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateNotIn(List<Date> values) {
+        public Criteria andTsignoutdateNotIn(List<String> values) {
             addCriterion("tsignoutdate not in", values, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateBetween(Date value1, Date value2) {
+        public Criteria andTsignoutdateBetween(String value1, String value2) {
             addCriterion("tsignoutdate between", value1, value2, "tsignoutdate");
             return (Criteria) this;
         }
 
-        public Criteria andTsignoutdateNotBetween(Date value1, Date value2) {
+        public Criteria andTsignoutdateNotBetween(String value1, String value2) {
             addCriterion("tsignoutdate not between", value1, value2, "tsignoutdate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestIsNull() {
-            addCriterion("rest is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestIsNotNull() {
-            addCriterion("rest is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestEqualTo(String value) {
-            addCriterion("rest =", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestNotEqualTo(String value) {
-            addCriterion("rest <>", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestGreaterThan(String value) {
-            addCriterion("rest >", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestGreaterThanOrEqualTo(String value) {
-            addCriterion("rest >=", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestLessThan(String value) {
-            addCriterion("rest <", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestLessThanOrEqualTo(String value) {
-            addCriterion("rest <=", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestLike(String value) {
-            addCriterion("rest like", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestNotLike(String value) {
-            addCriterion("rest not like", value, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestIn(List<String> values) {
-            addCriterion("rest in", values, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestNotIn(List<String> values) {
-            addCriterion("rest not in", values, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestBetween(String value1, String value2) {
-            addCriterion("rest between", value1, value2, "rest");
-            return (Criteria) this;
-        }
-
-        public Criteria andRestNotBetween(String value1, String value2) {
-            addCriterion("rest not between", value1, value2, "rest");
             return (Criteria) this;
         }
     }
