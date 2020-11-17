@@ -27,11 +27,15 @@ public interface LoService {
     List<ExamItems> selectByepaperid(int id);//根据试卷id查找题目
     ExamPaper selectById(int id);//根据id查找该套题
     int insertexamscore(ExamScore examScore);//插入成绩数据
-    ExamScore selectByUserIdAndPaperId(int userid, int paperid);//通过用户id和试题id查找相对应的成绩
+    ExamScore selectByUserIdAndPaperId(int userid, int paperid,int papergrade);//通过用户id和试题id查找相对应的成绩
     int insertExamScoreDetail(ExamScoreDetail examScoreDetail);//将每次做的题的数据添加到该数据库
     ExamScoreDetail selectByUseridAndScoreid(int shitiid, int paperid);//通过实体id和试题id查找做过的题
     List<ExamPaper> loSelectPaper();//查询试卷
     List<ExamScore> selectByUserIdAndPaperIdl(int userid, int paperid);//通过用户id和试题id查找相对应的成绩
     UserInfo uiselectByUserId(int id);//根据用户id查找userinfo中的信息
     List<ExamScore> selectByUserIdAndPaperIdAndPaperUserInfo(int userid, int paperid);//通过用户id和试题id查找相对应的成绩和试卷信息
+    GradeUser selectGradeUserByUserId(int userid);/*查询该用户属于内个班级*/
+    List<PaperGrade> selectPGByGradeId(int gradeid);//根据班级id查询老师发布的任务
+    Grade selcetByGradeId(int gradeid);//根据班级id查找班级
+
 }

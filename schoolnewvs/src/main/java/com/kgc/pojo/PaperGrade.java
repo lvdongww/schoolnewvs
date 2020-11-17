@@ -15,6 +15,29 @@ public class PaperGrade {
 
     private Integer pgtype;
 
+    private ExamPaper examPaper;
+
+    @Override
+    public String toString() {
+        return "PaperGrade{" +
+                "pgid=" + pgid +
+                ", pid=" + pid +
+                ", gid=" + gid +
+                ", startTime=" + startTime +
+                ", stopTime=" + stopTime +
+                ", pgtype=" + pgtype +
+                ", examPaper=" + examPaper +
+                '}';
+    }
+
+    public ExamPaper getExamPaper() {
+        return examPaper;
+    }
+
+    public void setExamPaper(ExamPaper examPaper) {
+        this.examPaper = examPaper;
+    }
+
     public Integer getPgid() {
         return pgid;
     }

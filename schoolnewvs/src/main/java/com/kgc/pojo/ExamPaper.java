@@ -16,7 +16,17 @@ public class ExamPaper {
 
     private Date createTime;
 
+    private PaperGrade paperGrade;
+
     private List<ExamScore> scoreList;
+
+    public PaperGrade getPaperGrade() {
+        return paperGrade;
+    }
+
+    public void setPaperGrade(PaperGrade paperGrade) {
+        this.paperGrade = paperGrade;
+    }
 
     public List<ExamScore> getScoreList() {
         return scoreList;

@@ -6,6 +6,7 @@ import com.kgc.mapper.*;
 import com.kgc.pojo.*;
 import com.kgc.service.LoService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class LoServiceImpl implements LoService {
     ExamScoreMapper examScoreMapper;
     @Resource
     ExamScoreDetailMapper examScoreDetailMapper;
+    @Resource
+    PaperGradeMapper paperGradeMapper;
     @Override
     public List<Grade> selectByGradeId(int gradeId) {
         GradeExample example=new GradeExample();
@@ -206,9 +209,12 @@ public class LoServiceImpl implements LoService {
     }
 
     @Override
-    public ExamScore selectByUserIdAndPaperId(int userid, int paperid) {
+    public ExamScore selectByUserIdAndPaperId(int userid, int paperid, int papergrade) {
         ExamScoreExample example=new ExamScoreExample();
         ExamScoreExample.Criteria criteria = example.createCriteria();
+        if(papergrade!=-1){
+            criteria.andPgidEqualTo(papergrade);
+        }
         criteria.andUseridEqualTo(userid);
         criteria.andPaperidEqualTo(paperid);
         List<ExamScore> examScores = examScoreMapper.selectByExample(example);
@@ -259,5 +265,37 @@ public class LoServiceImpl implements LoService {
             examScore.setExamPaper(examPaper);
         }
         return examScores;
+    }
+
+    @Override
+    public GradeUser selectGradeUserByUserId(int userid) {
+        GradeUserExample example=new GradeUserExample();
+        GradeUserExample.Criteria criteria = example.createCriteria();
+        criteria.andUseridEqualTo(userid);
+        List<GradeUser> gradeUsers = gradeUserMapper.selectByExample(example);
+        if(gradeUsers==null){
+            System.out.println("selectGradeUserByUserId方法取到的值为空 该学生没有班级");
+            return null;
+        }
+        return gradeUsers.get(0);
+    }
+
+    @Override
+    public List<PaperGrade> selectPGByGradeId(int gradeid) {
+        PaperGradeExample example=new PaperGradeExample();
+        PaperGradeExample.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("pgid desc");
+        criteria.andGidEqualTo(gradeid);
+        List<PaperGrade> paperGrades = paperGradeMapper.selectByExample(example);
+        if(paperGrades==null){
+            System.out.println("selectPGByGradeId方法取到的值为空 该班级没有布置的题");
+            return null;
+        }
+        return paperGrades;
+    }
+
+    @Override
+    public Grade selcetByGradeId(int gradeid) {
+        return gradeMapper.selectByPrimaryKey(gradeid);
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>课工场在线考试平台</title>
@@ -15,19 +15,19 @@
             <div class=" row">
                 <label for="" class="col-lg-offset-2 col-md-3 text-right" style="font-size: 25px ;color: #2aabd2">考生：</label>
                 <div class="col-md-6">
-                    <label for="" style="font-size: 24px;color: #1b6d85">${suserinfo.nickname}</label>
+                    <label for="" style="font-size: 24px;color: #1b6d85" th:text="${session.username}"></label>
                 </div>
             </div>
             <div class="row">
                 <label for="" class="col-lg-offset-2 col-md-3 text-right" style="font-size: 24px;color: coral">成绩：</label>
                 <div class="col-md-6">
-                    <label for="" style="color: red;font-size: 24px">${examScore.score}</label>
+                    <label for="" style="color: red;font-size: 24px" th:text="${session.dangqiankaoshichengji}"></label>
                 </div>
             </div>
             <br>
             <div class="row col-md-3 col-lg-offset-4">
-                <a href="/home/papers.action" class="btn btn-success btn-block">回到首页</a>
-                <a href="/chajiexi?id=${examScore.paperid}" class="btn btn-primary btn-block">查看解析</a>
+                <a href="/banjiceshi" class="btn btn-success btn-block">回到首页</a>
+                <a href="/chajiexi" class="btn btn-primary btn-block">查看解析</a>
             </div>
 
         </div>

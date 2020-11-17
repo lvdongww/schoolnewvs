@@ -41,6 +41,16 @@ public class ExamScore {
         this.errors = errors;
     }
 
+    public ExamScore(Integer scoreid, Integer userid, Integer paperid, Integer pgid, Integer score, Integer rights, Integer errors, Date subtime) {
+        this.scoreid = scoreid;
+        this.userid = userid;
+        this.paperid = paperid;
+        this.pgid = pgid;
+        this.score = score;
+        this.rights = rights;
+        this.errors = errors;
+        this.subtime = subtime;
+    }
 
     public Integer getScoreid() {
         return scoreid;
