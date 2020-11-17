@@ -380,11 +380,43 @@ public class ChitchatController {
     }
     @RequestMapping("/stuSelectCheck")
     @ResponseBody
-    public Map<String,Object> stuSelectCheck(@RequestParam(defaultValue = "1")Integer aid, String firstDayont, String lastDay,HttpSession session){
-        aid=(Integer) session.getAttribute("aid");
+    public Map<String,Object> stuSelectCheck(@RequestParam(defaultValue = "0")Integer aid, String firstDayont, String lastDay,HttpSession session){
+        if(aid==0){
+            aid=(Integer) session.getAttribute("aid");
+        }
         Map<String,Object> map=new HashMap<>();
         List<Checks> checks = service.lvSelectCheck(aid, firstDayont, lastDay);
         map.put("data",checks);
         return map;
     }
+    @RequestMapping("/kao-teacher")
+    public String kaoTeacher(){
+        return "teacher_check";
+    }
+    @RequestMapping("/selectGrade")
+    @ResponseBody
+    public Map<String,Object> selectGrade(HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        Integer aid=(Integer) session.getAttribute("aid");
+        List<Grade> grades = service.lvSelectGrade(aid);
+        map.put("data",grades);
+        return map;
+    }
+    @RequestMapping("/lvSelectToDay")
+    @ResponseBody
+    public Map<String,Object> lvSelectToDay(Integer pageIndex,Integer pageSize,Integer gid,HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        PageInfo<UserInfo> userInfoPageInfo = service.lvSelectToDay(pageIndex, pageSize, gid);
+        map.put("data",userInfoPageInfo);
+        return map;
+    }
+    @RequestMapping("/lvSelectBenKao")
+    @ResponseBody
+    public Map<String,Object> lvSelectBenKao(Integer pageIndex,Integer pageSize,Integer gid,String firstDayont,String lastDay,HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        PageInfo<UserInfo> pageInfo = service.lvSelectBenKao(pageIndex, pageSize, gid, firstDayont, lastDay);
+        map.put("data",pageInfo);
+        return map;
+    }
+
 }

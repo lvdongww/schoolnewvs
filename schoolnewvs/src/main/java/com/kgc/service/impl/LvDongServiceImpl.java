@@ -1,5 +1,7 @@
 package com.kgc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.kgc.mapper.*;
 import com.kgc.pojo.*;
 import com.kgc.service.LvDongService;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +36,10 @@ public class LvDongServiceImpl implements LvDongService {
     ExamItemsMapper examItemsMapper;
     @Resource
     ChecksMapper checksMapper;
+    @Resource
+    GradeMapper gradeMapper;
+    @Resource
+    GradeUserMapper gradeUserMapper;
     //添加消息
     @Override
     public int addXiaoXi(XiaoXi xiaoXi) {
@@ -216,6 +223,56 @@ public class LvDongServiceImpl implements LvDongService {
         }
         List<Checks> checks = checksMapper.selectByExample(checkExample);
         return checks;
+    }
+
+    @Override
+    public List<Grade> lvSelectGrade(Integer aid) {
+        GradeUserExample gradeExample=new GradeUserExample();
+        GradeUserExample.Criteria criteria = gradeExample.createCriteria();
+        GradeExample gradeExample1=new GradeExample();
+        GradeExample.Criteria criteria1 = gradeExample1.createCriteria();
+        criteria.andUseridEqualTo(aid);
+        List<GradeUser> gradeUsers = gradeUserMapper.selectByExample(gradeExample);
+        List<Grade> grades=new ArrayList<>();
+        for (GradeUser gradeUser : gradeUsers) {
+            Grade grade = gradeMapper.selectByPrimaryKey(gradeUser.getGradeid());
+            grades.add(grade);
+        }
+        return grades;
+    }
+
+    @Override
+    public PageInfo<UserInfo> lvSelectToDay(Integer pageIndex, Integer pageSize, Integer gid) {
+        PageHelper.startPage(pageIndex,pageSize);
+        List<UserInfo> userInfos = userinfoMapper.lvSelectToDay(gid);
+        PageInfo<UserInfo> pageInfo=new PageInfo<>(userInfos);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<UserInfo> lvSelectBenKao(Integer pageIndex, Integer pageSize, Integer gid,String firstDayont,String lastDay) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");//注意月份是MM
+        PageHelper.startPage(pageIndex,pageSize);
+        List<UserInfo> userInfos = userinfoMapper.lvSelectBenKao(gid);
+        Date date;
+        Date date1;
+        for (UserInfo userInfo : userInfos) {
+            try {
+                ChecksExample checksExample=new ChecksExample();
+                ChecksExample.Criteria criteria = checksExample.createCriteria();
+                date= simpleDateFormat.parse(firstDayont);
+                date1=simpleDateFormat.parse(lastDay);
+                criteria.andAidEqualTo(userInfo.getAccid());
+                criteria.andSignindateBetween(date,date1);
+                List<Checks> checks = checksMapper.selectByExample(checksExample);
+                userInfo.setCount(checks.size());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        PageInfo<UserInfo> pageInfo=new PageInfo<>(userInfos);
+        return pageInfo;
     }
 
 

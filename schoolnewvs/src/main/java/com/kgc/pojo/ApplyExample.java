@@ -474,6 +474,126 @@ public class ApplyExample {
             addCriterion("appdate not between", value1, value2, "appdate");
             return (Criteria) this;
         }
+
+        public Criteria andAppcountIsNull() {
+            addCriterion("appcount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountIsNotNull() {
+            addCriterion("appcount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountEqualTo(Integer value) {
+            addCriterion("appcount =", value, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountNotEqualTo(Integer value) {
+            addCriterion("appcount <>", value, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountGreaterThan(Integer value) {
+            addCriterion("appcount >", value, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("appcount >=", value, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountLessThan(Integer value) {
+            addCriterion("appcount <", value, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountLessThanOrEqualTo(Integer value) {
+            addCriterion("appcount <=", value, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountIn(List<Integer> values) {
+            addCriterion("appcount in", values, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountNotIn(List<Integer> values) {
+            addCriterion("appcount not in", values, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountBetween(Integer value1, Integer value2) {
+            addCriterion("appcount between", value1, value2, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcountNotBetween(Integer value1, Integer value2) {
+            addCriterion("appcount not between", value1, value2, "appcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateIsNull() {
+            addCriterion("appcrudate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateIsNotNull() {
+            addCriterion("appcrudate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateEqualTo(Date value) {
+            addCriterion("appcrudate =", value, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateNotEqualTo(Date value) {
+            addCriterion("appcrudate <>", value, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateGreaterThan(Date value) {
+            addCriterion("appcrudate >", value, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateGreaterThanOrEqualTo(Date value) {
+            addCriterion("appcrudate >=", value, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateLessThan(Date value) {
+            addCriterion("appcrudate <", value, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateLessThanOrEqualTo(Date value) {
+            addCriterion("appcrudate <=", value, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateIn(List<Date> values) {
+            addCriterion("appcrudate in", values, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateNotIn(List<Date> values) {
+            addCriterion("appcrudate not in", values, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateBetween(Date value1, Date value2) {
+            addCriterion("appcrudate between", value1, value2, "appcrudate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppcrudateNotBetween(Date value1, Date value2) {
+            addCriterion("appcrudate not between", value1, value2, "appcrudate");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
   <link rel="stylesheet" href="../static/css/calendar.css">
+  <style>
+    .div_z{
+      float: left;
+    }
+    .div_k{
+
+      display: inline-block;
+      margin-left: 5px;
+      margin-right: 5px;
+      width: 30px;
+      height: 10px;
+    }
+  </style>
 </head>
+
 <body>
+  <input type="hidden" class="caid" th:value="${session.calendar_aid!=null}?${session.calendar_aid}:0">
+  <div style="margin-left: 485px; margin-top:20px;width: 500px;height: 20px">
+    <div class="div_z">正常考勤<div class="div_k color-greenyellow"></div></div>
+    <div class="div_z">考勤异常<div class="div_k color-red"></div></div>
+    <div class="div_z">考勤请假<div class="div_k color-orange"></div></div>
+    <div class="div_z">当天<div class="div_k" style="background-color: rgb(255, 128, 142); "></div></div>
+  </div>
   <div id="calendar" class="calendar"></div>
 
 

@@ -20,6 +20,26 @@
     <result column="gradeid" property="gradeid" jdbcType="INTEGER" />
     <result column="userid" property="userid" jdbcType="INTEGER" />
   </resultMap>
+  <resultMap id="BaseResultMap2" type="com.kgc.pojo.UserInfo" >
+    <id column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="accid" property="accid" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="eamil" property="eamil" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="touxiang" property="touxiang" jdbcType="VARCHAR" />
+    <result column="qianming" property="qianming" jdbcType="VARCHAR" />
+    <result column="modification" property="modification" jdbcType="TIMESTAMP" />
+    <result column="utype" property="utype" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="gname" property="gname" jdbcType="VARCHAR" />
+    <result column="guid" property="guid" jdbcType="INTEGER" />
+    <result column="gradeid" property="gradeid" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="chtype" property="chtype" jdbcType="INTEGER" />
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -85,6 +105,31 @@
   <sql id="Base_Column_List2" >
     COUNT(accid) as personsum,gname,gradeid
   </sql>
+
+  <select id="lvSelectToDay" resultMap="BaseResultMap2" >
+    select accid,nickname,gname,checks.`chtype`
+from userinfo left join checks on userinfo.accid=checks.aid and date(signindate) = curdate()
+ inner join gradeuser
+on userinfo.accid=gradeuser.userid
+inner join grade
+on grade.gid=gradeuser.gradeid and grade.`gid`=#{gid}
+inner join account
+on account.aid=userinfo.accid
+inner join position
+on account.posid=position.pid and position.pid=1
+  </select>
+  <select id="lvSelectBenKao" resultMap="BaseResultMap2" >
+   select accid,nickname,gname
+from userinfo
+inner join gradeuser
+on userinfo.accid=gradeuser.userid
+inner join grade
+on grade.gid=gradeuser.gradeid and grade.`gid`=#{gid}
+inner join account
+on account.aid=userinfo.accid
+inner join position
+on account.posid=position.pid and position.pid=1
+  </select>
   <select id="selectByExample2" resultMap="BaseResultMap" parameterType="com.kgc.pojo.UserInfoExample" >
     select
     <if test="distinct" >

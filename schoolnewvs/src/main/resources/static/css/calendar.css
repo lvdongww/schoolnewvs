@@ -81,7 +81,7 @@ ul, li { list-style: none; }
 }
 .calendar-date {}
 .calendar-date .item {
-  border-radius: 50%;
+  /*border-radius: 50%;*/
   cursor: pointer;
   font-size: 14px;
 }
@@ -127,4 +127,15 @@ ul, li { list-style: none; }
   color: #fff;
   font-size: 14px;
   line-height: 24px;
+}
+
+
+.color-red{
+  background-color:red;
+}
+.color-orange{
+  background-color:orange;
+}
+.color-greenyellow{
+  background-color:greenyellow;
 }

@@ -15,6 +15,10 @@ public class Apply {
 
     private Date appdate;
 
+    private Integer appcount;
+
+    private Date appcrudate;
+
     public Integer getAppid() {
         return appid;
     }
@@ -61,5 +65,21 @@ public class Apply {
 
     public void setAppdate(Date appdate) {
         this.appdate = appdate;
+    }
+
+    public Integer getAppcount() {
+        return appcount;
+    }
+
+    public void setAppcount(Integer appcount) {
+        this.appcount = appcount;
+    }
+
+    public Date getAppcrudate() {
+        return appcrudate;
+    }
+
+    public void setAppcrudate(Date appcrudate) {
+        this.appcrudate = appcrudate;
     }
 }

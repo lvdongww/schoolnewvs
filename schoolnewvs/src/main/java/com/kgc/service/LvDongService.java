@@ -1,5 +1,6 @@
 package com.kgc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.kgc.pojo.*;
 
 import java.util.List;
@@ -50,6 +51,10 @@ public interface LvDongService {
 
     //查询个人考勤信息
     List<Checks> lvSelectCheck(int aid,String first,String last);
+    //查询班级
+    List<Grade> lvSelectGrade(Integer aid);
+    //查询今天考勤信息
+    PageInfo<UserInfo> lvSelectToDay(Integer pageIndex, Integer pageSize, Integer gid);
 
-
+    PageInfo<UserInfo> lvSelectBenKao(Integer pageIndex, Integer pageSize, Integer gid,String firstDayont,String lastDay);
 }

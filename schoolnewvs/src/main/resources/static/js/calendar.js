@@ -37,7 +37,7 @@ $(function () {
             var changeStr = addMark(_dateStr);
             var _week = changingStr(changeStr).getDay();
             var _weekStr = '';
-
+            var zhu=$(obj).attr('zhu');
             this.$calendar_today.show();
 
             this.$calendar_today
@@ -70,7 +70,7 @@ $(function () {
             }
 
             this.$calendarToday_date.text(changeStr);
-            this.$calendarToday_week.text(_weekStr);
+            this.$calendarToday_week.text(zhu);
         },
 
         showCalendar: function () { // 输入数据并显示
@@ -83,10 +83,9 @@ $(function () {
             var firstDayont=getCurrentMonthFirst(dateObj.getDate());
             var lastDay = getCurrentMonthLast(dateObj.getDate());
             this.$calendarTitle_text.text(year + '/' + dateStr.substr(4, 2));
-            console.log(dateObj.getDate())
-            console.log(lastDay);
-            console.log(firstDayont);
+            var aid=$(".caid").val();
             var json={
+                aid:aid,
                 firstDayont:firstDayont,
                 lastDay:lastDay
             }
@@ -94,18 +93,7 @@ $(function () {
                 // allDay: 得到当前列表显示的所有天数
                 var allDay = new Date(year, month - 1, i + 1 - firstDay.getDay());
                 var allDay_str = returnDateStr(allDay);
-                $.ajax(
-                    {
-                        "url": "/stuSelectCheck",
-                        "type": "POST",
-                        "data": json,
-                        "dataType": "json",
-                        "async": false,
-                        success: function (result) {
 
-                        }
-                    }
-                )
                 $(this).text(allDay.getDate()).attr('data', allDay_str);
 
                 if (returnDateStr(new Date()) === allDay_str) {
@@ -115,6 +103,39 @@ $(function () {
                 } else {
                     $(this).attr('class', 'item');
                 }
+                var thiss=$(this);
+                $.ajax(
+                    {
+                        "url": "/stuSelectCheck",
+                        "type": "POST",
+                        "data": json,
+                        "dataType": "json",
+                        "async": false,
+                        success: function (result) {
+                            $.each(result.data,function (i,v) {
+                                var date=new Date(v.signindate);
+                                if (returnDateStr(date)===allDay_str){
+                                    thiss.attr("zhu",v.remark);
+                                    if (v.chtype==1){
+                                        thiss.addClass("color-greenyellow");
+                                    }
+                                    if (v.chtype==2||v.chtype==3){
+                                        thiss.addClass("color-red");
+                                    }
+                                    if (v.chtype==4){
+                                        thiss.addClass("color-orange");
+                                    }
+                                    return;
+                                }else{
+                                   var zhu=thiss.attr("zhu");
+                                    if (typeof(zhu)=="undefined" ){
+                                        thiss.attr("zhu","未签到");
+                                    }
+                                }
+                            })
+                        }
+                    }
+                )
             });
 
             // 已选择的情况下，切换日期也不会改变

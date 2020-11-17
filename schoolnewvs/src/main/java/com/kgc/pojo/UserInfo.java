@@ -34,6 +34,25 @@ public class UserInfo {
     private Integer userid;
     private  Integer personsum;
 
+    private Integer chtype;
+    private Integer count;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Integer getChtype() {
+        return chtype;
+    }
+
+    public void setChtype(Integer chtype) {
+        this.chtype = chtype;
+    }
+
     public String getGname() {
         return gname;
     }
