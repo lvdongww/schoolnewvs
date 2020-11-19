@@ -104,6 +104,7 @@
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     })
     $(function () {
+        xiala()
         fenye();
         $(".jin").click(function () {
             $(".newDate").text(1)
@@ -125,7 +126,7 @@
     var pageSize1=5;
     var pageInfo;
     function fenye() {
-        xiala();
+
        var type= $(".newDate").text();
        var toDay=toDay1();
        var gid=$("#banji").val();
@@ -162,6 +163,7 @@
                 })
             },"json")
         }else{
+            $(".thisMonth tr").remove();
            var json={
                gid:gid,
                pageIndex:pageNum1,
@@ -171,6 +173,19 @@
             }
             $.post("/lvSelectBenKao",json,function (result) {
                 console.log(result)
+                pageInfo=result.data;
+                $(".ye1").text(pageNum1+"/"+result.data.pages)
+
+
+                $.each(result.data.list,function (i,v) {
+                    var tr=$(" <tr>\n" +
+                        "                    <th>"+v.nickname+"</th>\n" +
+                        "                    <th>"+v.gname+"</th>\n" +
+                        "                    <th>"+toDay.substring(8,10)+"</th>\n" +
+                        "                    <th>"+v.count+"</th>\n" +
+                        "                    </tr>")
+                    $(".thisMonth").append(tr);
+                })
             },"json")
         }
 
