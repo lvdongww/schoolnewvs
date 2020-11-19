@@ -80,6 +80,7 @@
 </form>
 <form action="/chajiexiwei" id="chajiexishijuan" method="post" >
     <input type="hidden" id="jiexishijuan" name="id">
+    <input type="hidden" id="papergradee" name="papergrade" >
 </form>
 </body>
 <script type="text/javascript">
@@ -145,8 +146,9 @@
         }
         return fanhui;
     }
-    function chakanshijuandejiexi(shijuanid) {
+    function chakanshijuandejiexi(shijuanid,papergrade) {
         $("#jiexishijuan").val(shijuanid);
+        $("#papergradee").val(papergrade)
         $("#chajiexishijuan").submit();
     }
     function weidaoshijian() {
@@ -242,7 +244,7 @@
                                 }else if(fanhui==2){
                                     $("#" + v.paperid).text("查看解析")
                                     $("#" + v.paperid).attr("class", "layui-btn ");
-                                    $("#" + v.paperid).attr("onclick", "chakanshijuandejiexi('"+v.paperid+"')")
+                                    $("#" + v.paperid).attr("onclick", "chakanshijuandejiexi('"+v.paperid+"','" + v.paperGrade.pgid + "')")
                                 }
                             }else{
                                 //alert("没做过")

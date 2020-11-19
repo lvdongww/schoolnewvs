@@ -51,6 +51,31 @@ public class ExamScore {
         this.errors = errors;
         this.subtime = subtime;
     }
+    public ExamScore(Integer scoreid, Integer userid, Integer paperid, Integer score, Integer rights, Integer errors, Date subtime) {
+        this.scoreid = scoreid;
+        this.userid = userid;
+        this.paperid = paperid;
+        this.score = score;
+        this.rights = rights;
+        this.errors = errors;
+        this.subtime = subtime;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ExamScore{" +
+                "scoreid=" + scoreid +
+                ", userid=" + userid +
+                ", paperid=" + paperid +
+                ", pgid=" + pgid +
+                ", score=" + score +
+                ", rights=" + rights +
+                ", errors=" + errors +
+                ", subtime=" + subtime +
+                ", examPaper=" + examPaper +
+                '}';
+    }
 
     public Integer getScoreid() {
         return scoreid;

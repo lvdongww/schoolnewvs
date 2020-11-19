@@ -30,7 +30,7 @@
 						<font><input type="button" onclick="jiaojuan()" name="test_jiaojuan" value="交卷"></font>
 					</div>
 
-					<div class="test_content" th:if="${xuanze!=null}">
+					<div class="test_content" th:if="${xuanze.size()>0}">
 						<div class="test_content_title">
 							<h2>单选题</h2>
 							<p>
@@ -38,7 +38,7 @@
 							</p>
 						</div>
 					</div>
-					<div class="test_content_nr"  th:if="${xuanze!=null}">
+					<div class="test_content_nr"  th:if="${xuanze.size()>0}">
 						<ul>
 
 							<li   th:each="it : ${xuanze}" th:id="qu_0_+${it.getEid()}">
@@ -52,11 +52,11 @@
 										<li class="option">
 
 											<input type="radio" class="radioOrCheck"  th:name="${it.getEid()}"
-												   th:id="0_answer_1_option_+${it.getEa()}" value="a"
+												   th:id="0_answer_1_option_a+${it.eid}" value="a"
 											/>
 
 
-											<label th:for="0_answer_1_option_+${it.getEa()}">
+											<label th:for="0_answer_1_option_a+${it.eid}">
 												A.
 												<p class="ue" style="display: inline;" th:text="${it.getEa()}"></p>
 											</label>
@@ -65,11 +65,11 @@
 										<li class="option">
 
 											<input type="radio" class="radioOrCheck" th:name="${it.getEid()}"
-												   th:id="0_answer_1_option_+${it.getEb()}" value="b"
+												   th:id="0_answer_1_option_b+${it.eid}" value="b"
 											/>
 
 
-											<label th:for="0_answer_1_option_+${it.getEb()}">
+											<label th:for="0_answer_1_option_b+${it.eid}">
 												B.
 												<p class="ue" style="display: inline;" th:text="${it.getEb()}"></p>
 											</label>
@@ -78,11 +78,11 @@
 										<li class="option">
 
 											<input type="radio" class="radioOrCheck" th:name="${it.getEid()}"
-												   th:id="0_answer_1_option_+${it.getEc()}" value="c"
+												   th:id="0_answer_1_option_c+${it.eid}" value="c"
 											/>
 
 
-											<label th:for="0_answer_1_option_+${it.getEc()}">
+											<label th:for="0_answer_1_option_c+${it.eid}">
 												C.
 												<p class="ue" style="display: inline;" th:text="${it.getEc()}"></p>
 											</label>
@@ -91,11 +91,11 @@
 										<li class="option">
 
 											<input type="radio" class="radioOrCheck" th:name="${it.getEid()}"
-												   th:id="0_answer_1_option_+${it.getEd()}" value="d"
+												   th:id="0_answer_1_option_d+${it.eid}" value="d"
 											/>
 
 
-											<label th:for="0_answer_1_option_+${it.getEd()}">
+											<label th:for="0_answer_1_option_d+${it.eid}">
 												D.
 												<p class="ue" style="display: inline;" th:text="${it.getEd()}"></p>
 											</label>
@@ -106,16 +106,15 @@
 							</li>
 						</ul>
 					</div>
-
-					<div class="test_content" th:if="${panduan!=null}">
-						<div class="test_content_title">
+					<div th:if="${panduan.size()>0}" class="test_content" >
+						<div th:if="${panduan.size()>0}" class="test_content_title">
 							<h2>判断题</h2>
 							<p>
 								<span>共</span><i class="content_lit" th:text="${panduanSize}"></i><span>题，</span><span>合计</span><i class="content_fs" th:text="${panduanScore}"></i><span>分</span>
 							</p>
 						</div>
 					</div>
-					<div class="test_content_nr"  th:if="${panduan!=null}">
+					<div class="test_content_nr"  th:if="${panduan.size()>0}">
 						<ul>
 							<li th:id="qu_1_+${ti.getEid()}" th:each="ti : ${panduan}">
 								<div class="test_content_nr_tt">
@@ -148,7 +147,7 @@
 					</div>
 				</form>
 			</div>
-
+			</a>
 		</div>
 		<div class="nr_right">
 			<div class="nr_rt_main">
@@ -162,7 +161,7 @@
 						</p>
 					</div>
 
-					<div class="rt_content" th:if="${xuanze!=null}">
+					<div class="rt_content" th:if="${xuanze.size()>0}">
 						<div class="rt_content_tt">
 							<h2>单选题</h2>
 							<p>
@@ -176,7 +175,7 @@
 						</div>
 					</div>
 
-					<div class="rt_content" th:if="${panduan!=null}">
+					<div class="rt_content" th:if="${panduan.size()>0}">
 						<div class="rt_content_tt">
 							<h2>判断题</h2>
 							<p>
