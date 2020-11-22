@@ -7,6 +7,17 @@ public class GradeUser {
 
     private Integer userid;
 
+    private UserInfo userInfo;
+
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
     public Integer getGuid() {
         return guid;
     }
@@ -38,6 +49,7 @@ public class GradeUser {
                 "guid=" + guid +
                 ", gradeid=" + gradeid +
                 ", userid=" + userid +
+                ", userInfo=" + userInfo +
                 '}';
     }
 }

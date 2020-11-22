@@ -6,21 +6,27 @@ import com.github.pagehelper.PageInfo;
 import com.kgc.pojo.*;
 import com.kgc.service.LoService;
 import com.kgc.service.LvDongService;
-import com.sun.mail.imap.protocol.MODSEQ;
+
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.thymeleaf.util.StringUtils;
+
 
 import javax.annotation.Resource;
-import javax.jws.WebParam;
-import javax.net.ssl.HttpsURLConnection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.sound.midi.Soundbank;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.zip.ZipEntry;
+
 
 @Controller
 public class LoTeacherHomeController {
@@ -108,6 +114,11 @@ public class LoTeacherHomeController {
         for (int i = 0; i < gradeUsers.size(); i++) {
             List<Grade> grades1 = loService.selectByGid(gradeUsers.get(i).getGradeid());
             grades.add(grades1.get(grades1.size() - 1));
+        }
+        if (grades.size() > 0) {
+            map.put("status", false);
+        } else {
+            map.put("status", true);
         }
         map.put("data", grades);
         return map;
@@ -213,98 +224,101 @@ public class LoTeacherHomeController {
     /*试卷系统*/
     @RequestMapping("/stushijuan")
     /*@ResponseBody*/
-    public String stushijian(int id,int papergrade, Model model,HttpSession session) {
+    public String stushijian(int id, int papergrade, Model model, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        session.setAttribute("dangqianshijuanid",id);
-        session.setAttribute("papergrade",papergrade);/*当前papergrade的pgid*/
+        session.setAttribute("dangqianshijuanid", id);
+        session.setAttribute("papergrade", papergrade);/*当前papergrade的pgid*/
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         model.addAttribute("ti", examPaper);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
-        List<ExamItems> xuanze=new ArrayList<>();//记录所有选择题
-        int xuanzeScore=0;//记录选择题的总分
-        List<ExamItems> panduan=new ArrayList<>();//记录所有判断题
-        int panduanScore=0;//记录判断题的总分
+        List<ExamItems> xuanze = new ArrayList<>();//记录所有选择题
+        int xuanzeScore = 0;//记录选择题的总分
+        List<ExamItems> panduan = new ArrayList<>();//记录所有判断题
+        int panduanScore = 0;//记录判断题的总分
         for (ExamItems examItem : examItems) {
-            if(examItem.getEtype()==3){
+            if (examItem.getEtype() == 3) {
                 xuanze.add(examItem);
-                xuanzeScore+=examItem.getEscore();
+                xuanzeScore += examItem.getEscore();
             }
-            if(examItem.getEtype()==2){
+            if (examItem.getEtype() == 2) {
                 panduan.add(examItem);
-               panduanScore+=examItem.getEscore();
+                panduanScore += examItem.getEscore();
             }
         }
         /*选择题*/
-        model.addAttribute("xuanze",xuanze);
-        model.addAttribute("xuanzeSize",xuanze.size());
-        model.addAttribute("xuanzeScore",xuanzeScore);
+        model.addAttribute("xuanze", xuanze);
+        model.addAttribute("xuanzeSize", xuanze.size());
+        model.addAttribute("xuanzeScore", xuanzeScore);
         /*判断题*/
-        model.addAttribute("panduan",panduan);
-        model.addAttribute("panduanSize",panduan.size());
-        model.addAttribute("panduanScore",panduanScore);
+        model.addAttribute("panduan", panduan);
+        model.addAttribute("panduanSize", panduan.size());
+        model.addAttribute("panduanScore", panduanScore);
         return "/dostukaoshi";
     }
+
     /*试卷系统*/
     @RequestMapping("/tikustushijuan")
     /*@ResponseBody*/
-    public String tikustushijian(int id, Model model,HttpSession session) {
+    public String tikustushijian(int id, Model model, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        session.setAttribute("dangqiantikushijuanid",id);
+        session.setAttribute("dangqiantikushijuanid", id);
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         model.addAttribute("ti", examPaper);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
-        List<ExamItems> xuanze=new ArrayList<>();//记录所有选择题
-        int xuanzeScore=0;//记录选择题的总分
-        List<ExamItems> panduan=new ArrayList<>();//记录所有判断题
-        int panduanScore=0;//记录判断题的总分
+        List<ExamItems> xuanze = new ArrayList<>();//记录所有选择题
+        int xuanzeScore = 0;//记录选择题的总分
+        List<ExamItems> panduan = new ArrayList<>();//记录所有判断题
+        int panduanScore = 0;//记录判断题的总分
         for (ExamItems examItem : examItems) {
-            if(examItem.getEtype()==3){
+            if (examItem.getEtype() == 3) {
                 xuanze.add(examItem);
-                xuanzeScore+=examItem.getEscore();
+                xuanzeScore += examItem.getEscore();
             }
-            if(examItem.getEtype()==2){
+            if (examItem.getEtype() == 2) {
                 panduan.add(examItem);
-                panduanScore+=examItem.getEscore();
+                panduanScore += examItem.getEscore();
             }
         }
         /*选择题*/
-        model.addAttribute("xuanze",xuanze);
-        model.addAttribute("xuanzeSize",xuanze.size());
-        model.addAttribute("xuanzeScore",xuanzeScore);
+        model.addAttribute("xuanze", xuanze);
+        model.addAttribute("xuanzeSize", xuanze.size());
+        model.addAttribute("xuanzeScore", xuanzeScore);
         /*判断题*/
-        model.addAttribute("panduan",panduan);
-        model.addAttribute("panduanSize",panduan.size());
-        model.addAttribute("panduanScore",panduanScore);
+        model.addAttribute("panduan", panduan);
+        model.addAttribute("panduanSize", panduan.size());
+        model.addAttribute("panduanScore", panduanScore);
         return "/dotikukaoshi";
     }
 
     /*交卷前最后一次验证为空的题*/
     @RequestMapping("/stushijuantijiao")
     @ResponseBody
-    public Map<String, Object> stushijuantijiao( Model model,HttpSession session) {
+    public Map<String, Object> stushijuantijiao(Model model, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        int id=(int)session.getAttribute("dangqianshijuanid");
+        int id = (int) session.getAttribute("dangqianshijuanid");
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         model.addAttribute("ti", examPaper);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
-        map.put("data",examItems);
+        map.put("data", examItems);
         return map;
     }
+
     /*交卷前最后一次验证为空的题*/
     @RequestMapping("/tikushijuantijiao")
     @ResponseBody
-    public Map<String, Object> tikushijuantijiao( Model model,HttpSession session) {
+    public Map<String, Object> tikushijuantijiao(Model model, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        int id=(int)session.getAttribute("dangqiantikushijuanid");
+        int id = (int) session.getAttribute("dangqiantikushijuanid");
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         model.addAttribute("ti", examPaper);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
-        map.put("data",examItems);
+        map.put("data", examItems);
         return map;
     }
-   /* @RequestMapping("/stupanti")
-    public String stupandi( Model model, HttpServletRequest request, HttpSession session) {
-        int sum = 0;*//*计算总分*//*
+
+    /* @RequestMapping("/stupanti")
+     public String stupandi( Model model, HttpServletRequest request, HttpSession session) {
+         int sum = 0;*//*计算总分*//*
         int dui = 0;*//*计算对题数*//*
         int cuo = 0;*//*计算错题数*//*
         int id=(int)session.getAttribute("dangqianshijuanid");
@@ -347,7 +361,7 @@ public class LoTeacherHomeController {
         int insertexamscore = loService.insertexamscore(examScore);*//*将成绩数据添加到数据库*//*
         System.out.println("将成绩插入ExamScoer是否成功:" + insertexamscore);
         ExamScore inserthou = loService.selectByUserIdAndPaperId(aid, id);*//*查出刚才插入的成绩的实体类*//*
-        *//*将答*//*
+     *//*将答*//*
         for (int i = 0; i < tinum.size(); i++) {
             ExamScoreDetail examScoreDetail = new ExamScoreDetail(null, inserthou.getScoreid(), tinum.get(i), useranswer.get(i), userscore.get(i));
             int insert = loService.insertExamScoreDetail(examScoreDetail);
@@ -356,13 +370,13 @@ public class LoTeacherHomeController {
         }
         return "redirect:/score?id=" + id;
     }*/
-/*老师布置任务*/
+    /*老师布置任务*/
     @RequestMapping("/gradestupanti")
-    public String gradestupanti( Model model, HttpServletRequest request, HttpSession session) {
+    public String gradestupanti(Model model, HttpServletRequest request, HttpSession session) {
         int sum = 0;/*计算总分*/
         int dui = 0;/*计算对题数*/
         int cuo = 0;/*计算错题数*/
-        int id=(int)session.getAttribute("dangqianshijuanid");/*获取当前试题id*/
+        int id = (int) session.getAttribute("dangqianshijuanid");/*获取当前试题id*/
         List<String> useranswer = new ArrayList<>();/*记录用户的答案*/
         List<Integer> userscore = new ArrayList<>();/*记录用户的成绩*/
         List<Integer> tinum = new ArrayList<>();/*记录题号的成绩*/
@@ -375,17 +389,17 @@ public class LoTeacherHomeController {
             tinum.add(examItems.get(i).getEid());
             String da = request.getParameter("" + examItems.get(i).getEid() + "");
             System.out.println("您的答案是" + da);
-            if(da==null){
+            if (da == null) {
                 useranswer.add("未作答");
-            }else{
+            } else {
                 useranswer.add(da);
             }
-            if(da==null){
+            if (da == null) {
                 System.out.println("答错了 不能为空");
                 sum = sum + 0;
                 userscore.add(0);
                 cuo++;
-            }else if (da.equals(examItems.get(i).getEkeys())) {
+            } else if (da.equals(examItems.get(i).getEkeys())) {
                 System.out.println("答对了");
                 sum = sum + examItems.get(i).getEscore();
                 userscore.add(examItems.get(i).getEscore());
@@ -403,12 +417,12 @@ public class LoTeacherHomeController {
             System.out.println("============");
         }
 
-       int aid = (int) session.getAttribute("aid");/*获取当前用户id*/
-        int papergrade=(int) session.getAttribute("papergrade");
-        ExamScore examScore = new ExamScore(null,aid,id,papergrade,sum,dui,cuo,new Date());
+        int aid = (int) session.getAttribute("aid");/*获取当前用户id*/
+        int papergrade = (int) session.getAttribute("papergrade");
+        ExamScore examScore = new ExamScore(null, aid, id, papergrade, sum, dui, cuo, new Date());
         int insertexamscore = loService.insertexamscore(examScore);/*将成绩数据添加到数据库*/
         System.out.println("将成绩插入ExamScoer是否成功:" + insertexamscore);
-        ExamScore inserthou = loService.selectByUserIdAndPaperId(aid, id,papergrade);/*查出刚才插入的成绩的实体类*/
+        ExamScore inserthou = loService.selectByUserIdAndPaperId(aid, id, papergrade);/*查出刚才插入的成绩的实体类*/
         /*将答*/
         for (int i = 0; i < tinum.size(); i++) {
             ExamScoreDetail examScoreDetail = new ExamScoreDetail(null, inserthou.getScoreid(), tinum.get(i), useranswer.get(i), userscore.get(i));
@@ -416,16 +430,17 @@ public class LoTeacherHomeController {
             System.out.println("添加到ExamScoreDetail是否成功" + insert);
             System.out.println(examScoreDetail.toString());
         }
-        model.addAttribute("dangqianshijuanid",id);
-        session.setAttribute("dangqiankaoshichengji",sum);
+        model.addAttribute("dangqianshijuanid", id);
+        session.setAttribute("dangqiankaoshichengji", sum);
         return "redirect:/score";
     }
+
     @RequestMapping("/tikupanti")
-    public String tikupanti( Model model, HttpServletRequest request, HttpSession session) {
+    public String tikupanti(Model model, HttpServletRequest request, HttpSession session) {
         int sum = 0;/*计算总分*/
         int dui = 0;/*计算对题数*/
         int cuo = 0;/*计算错题数*/
-        int id=(int)session.getAttribute("dangqiantikushijuanid");/*获取当前试题id*/
+        int id = (int) session.getAttribute("dangqiantikushijuanid");/*获取当前试题id*/
         List<String> useranswer = new ArrayList<>();/*记录用户的答案*/
         List<Integer> userscore = new ArrayList<>();/*记录用户的成绩*/
         List<Integer> tinum = new ArrayList<>();/*记录题号的成绩*/
@@ -438,17 +453,17 @@ public class LoTeacherHomeController {
             tinum.add(examItems.get(i).getEid());
             String da = request.getParameter("" + examItems.get(i).getEid() + "");
             System.out.println("您的答案是" + da);
-            if(da==null){
+            if (da == null) {
                 useranswer.add("未作答");
-            }else{
+            } else {
                 useranswer.add(da);
             }
-            if(da==null){
+            if (da == null) {
                 System.out.println("答错了 不能为空");
                 sum = sum + 0;
                 userscore.add(0);
                 cuo++;
-            }else if (da.equals(examItems.get(i).getEkeys())) {
+            } else if (da.equals(examItems.get(i).getEkeys())) {
                 System.out.println("答对了");
                 sum = sum + examItems.get(i).getEscore();
                 userscore.add(examItems.get(i).getEscore());
@@ -466,11 +481,11 @@ public class LoTeacherHomeController {
             System.out.println("============");
         }
         int aid = (int) session.getAttribute("aid");/*获取当前用户id*/
-        ExamScore examScore = new ExamScore(null,aid,id,sum,dui,cuo,new Date());
-        System.out.println("!!!"+examScore.toString());
+        ExamScore examScore = new ExamScore(null, aid, id, sum, dui, cuo, new Date());
+        System.out.println("!!!" + examScore.toString());
         int insertexamscore = loService.insertexamscore(examScore);/*将成绩数据添加到数据库*/
         System.out.println("将成绩插入ExamScoer是否成功:" + insertexamscore);
-        ExamScore inserthou = loService.selectByUserIdAndPaperId(aid, id,-1);/*查出刚才插入的成绩的实体类*/
+        ExamScore inserthou = loService.selectByUserIdAndPaperId(aid, id, -1);/*查出刚才插入的成绩的实体类*/
         /*将答*/
         for (int i = 0; i < tinum.size(); i++) {
             ExamScoreDetail examScoreDetail = new ExamScoreDetail(null, inserthou.getScoreid(), tinum.get(i), useranswer.get(i), userscore.get(i));
@@ -478,16 +493,17 @@ public class LoTeacherHomeController {
             System.out.println("添加到ExamScoreDetail是否成功" + insert);
             System.out.println(examScoreDetail.toString());
         }
-        model.addAttribute("dangqianshijuanid",id);
-        session.setAttribute("dangqiankaoshichengji",sum);
-        return "redirect:/tikuscore?id="+id;
+        model.addAttribute("dangqianshijuanid", id);
+        session.setAttribute("dangqiankaoshichengji", sum);
+        return "redirect:/tikuscore?id=" + id;
     }
+
     @RequestMapping("/chajiexi")
     public String chajiexi(HttpSession session, Model model) {
-        int id=(int)session.getAttribute("dangqianshijuanid");
+        int id = (int) session.getAttribute("dangqianshijuanid");
         int aid = (int) session.getAttribute("aid");
-        int papergrade=(int) session.getAttribute("papergrade");
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,papergrade);
+        int papergrade = (int) session.getAttribute("papergrade");
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, papergrade);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         List<ExamScoreDetail> list = new ArrayList<>();
@@ -502,10 +518,11 @@ public class LoTeacherHomeController {
         model.addAttribute("examPaper", examPaper);/*查询该试题的信息*/
         return "testjiexi";
     }
+
     @RequestMapping("/tikuchajiexi")/*题库查解析*/
-    public String chajiexi(int id,HttpSession session, Model model) {
+    public String chajiexi(int id, HttpSession session, Model model) {
         int aid = (int) session.getAttribute("aid");
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,-1);
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, -1);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         List<ExamScoreDetail> list = new ArrayList<>();
@@ -520,11 +537,12 @@ public class LoTeacherHomeController {
         model.addAttribute("examPaper", examPaper);/*查询该试题的信息*/
         return "testjiexi";
     }
+
     @RequestMapping("/tikuchajiexiyouse")/*题库查解析*/
     public String tikuchajiexiyouse(HttpSession session, Model model) {
         int aid = (int) session.getAttribute("aid");
-        int id=(int)session.getAttribute("dangqiantikushijuanid");
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,-1);
+        int id = (int) session.getAttribute("dangqiantikushijuanid");
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, -1);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         List<ExamScoreDetail> list = new ArrayList<>();
@@ -539,12 +557,13 @@ public class LoTeacherHomeController {
         model.addAttribute("examPaper", examPaper);/*查询该试题的信息*/
         return "tikujiexi";
     }
+
     @RequestMapping("/chajiexiwei")/*没有提前获取id(试卷)的时候*/
-    public String chajiexiwei(Integer id,HttpSession session, Model model,int papergrade) {
+    public String chajiexiwei(Integer id, HttpSession session, Model model, int papergrade) {
         int aid = (int) session.getAttribute("aid");
-        session.setAttribute("dangqianshijuanid",id);
-        session.setAttribute("papergrade",papergrade);/*当前papergrade的pgid*/
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,papergrade);
+        session.setAttribute("dangqianshijuanid", id);
+        session.setAttribute("papergrade", papergrade);/*当前papergrade的pgid*/
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, papergrade);
         List<ExamItems> examItems = loService.selectByepaperid(id);/*查询所有试题*/
         ExamPaper examPaper = loService.selectById(id);/*查询该试题的信息*/
         List<ExamScoreDetail> list = new ArrayList<>();
@@ -563,30 +582,32 @@ public class LoTeacherHomeController {
     @RequestMapping("/score")
     public String score(Model model, HttpSession session) {
         int aid = (int) session.getAttribute("aid");
-        int id=(int)session.getAttribute("dangqianshijuanid");
+        int id = (int) session.getAttribute("dangqianshijuanid");
         UserInfo userInfo = loService.uiselectByUserId(aid);
         model.addAttribute("suserinfo", userInfo);
-        int papergrade=(int) session.getAttribute("papergrade");
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,papergrade);
+        int papergrade = (int) session.getAttribute("papergrade");
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, papergrade);
         model.addAttribute("examScore", examScore);
         return "score";
     }
+
     @RequestMapping("/tikuscore")
-    public String score(int id,Model model, HttpSession session) {
+    public String score(int id, Model model, HttpSession session) {
         int aid = (int) session.getAttribute("aid");
         UserInfo userInfo = loService.uiselectByUserId(aid);
         model.addAttribute("suserinfo", userInfo);
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,-1);
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, -1);
         model.addAttribute("examScore", examScore);
         return "/tikuscore";
     }
+
     @RequestMapping("/tikuscoreyouse")
     public String tikuscoreyouse(Model model, HttpSession session) {
-        int id=(int)session.getAttribute("dangqiantikushijuanid");
+        int id = (int) session.getAttribute("dangqiantikushijuanid");
         int aid = (int) session.getAttribute("aid");
         UserInfo userInfo = loService.uiselectByUserId(aid);
         model.addAttribute("suserinfo", userInfo);
-        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id,-1);
+        ExamScore examScore = loService.selectByUserIdAndPaperId(aid, id, -1);
         model.addAttribute("examScore", examScore);
         return "/tikuscore";
     }
@@ -693,19 +714,141 @@ public class LoTeacherHomeController {
         map.put("data", pageInfo);
         return map;
     }
+
     @RequestMapping("/gradetestpanduan")
     @ResponseBody
-    public Map<String,Object> gradetestpanduan(HttpSession session,Integer paperid,Integer pgid){
-        Map<String,Object> map=new HashMap<>();
-        int userid=(int)session.getAttribute("aid");
+    public Map<String, Object> gradetestpanduan(HttpSession session, Integer paperid, Integer pgid) {
+        Map<String, Object> map = new HashMap<>();
+        int userid = (int) session.getAttribute("aid");
         ExamScore examScore = loService.selectByUserIdPaperIdPgid(userid, paperid, pgid);
-        if(examScore!=null){
-            map.put("status",false);
-        }else{
-            map.put("status",true);
+        if (examScore != null) {
+            map.put("status", false);
+        } else {
+            map.put("status", true);
         }
         return map;
     }
+
+
+    /*教员功能*/
+    @RequestMapping("/addGradeTest")
+    @ResponseBody
+    public Map<String, Object> addGradeTest(Integer pid, Integer gid, String startTime, String stopTime) {
+        Map<String, Object> map = new HashMap<>();
+        /*转换时间类型*/
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String kai = startTime;
+        String jie = stopTime;
+        Date kk = new Date(kai);
+        Date jj = new Date(jie);
+        System.out.println(format.format(kk));
+        System.out.println(format.format(jj));
+        /*赋值*/
+        PaperGrade paperGrade = new PaperGrade(pid, gid, kk, jj, 0);
+        /*添加数据库数据*/
+        int insert = loService.insertPaperGrade(paperGrade);
+        if (insert > 0) {
+            map.put("status", true);
+        } else {
+            map.put("status", false);
+        }
+        System.out.println(paperGrade.toString());
+        return map;
+    }
+
+    @RequestMapping("/chaTeacherBuZhiGradeTest")
+    @ResponseBody
+    public Map<String, Object> chaTeacherBuZhiGradeTest(HttpSession session, @RequestParam(name = "grade",defaultValue = "0") Integer grade,@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        int userid = (int) session.getAttribute("aid");
+        PageHelper.startPage(pageNum,pageSize);
+        if (grade == 0) {
+            List<GradeUser> gradeUsers = loService.selectByUserIdd(userid);
+            if (gradeUsers.size() < 0) {
+            } else {
+                List<PaperGrade> zong = new ArrayList<>();
+                for (GradeUser gradeUser : gradeUsers) {
+                    List<PaperGrade> paperGrades = loService.selectPGByGradeId(gradeUser.getGradeid());
+                    for (PaperGrade paperGrade : paperGrades) {
+                        List<Grade> grades = loService.selectByGid(paperGrade.getGid());
+                        paperGrade.setGrade(grades.get(0));
+                        ExamPaper examPaper = loService.selectById(paperGrade.getPid());
+                        paperGrade.setExamPaper(examPaper);
+                        zong.add(paperGrade);
+                    }
+                }
+                PageInfo<PaperGrade> pageInfo=new PageInfo<>(zong);
+                map.put("data", pageInfo);
+            }
+        } else {
+            List<PaperGrade> zong = new ArrayList<>();
+                List<PaperGrade> paperGrades = loService.selectPGByGradeId(grade);
+                for (PaperGrade paperGrade : paperGrades) {
+                    List<Grade> grades = loService.selectByGid(paperGrade.getGid());
+                    paperGrade.setGrade(grades.get(0));
+                    ExamPaper examPaper = loService.selectById(paperGrade.getPid());
+                    paperGrade.setExamPaper(examPaper);
+                    zong.add(paperGrade);
+                }
+            PageInfo<PaperGrade> pageInfo=new PageInfo<>(zong);
+            map.put("data", pageInfo);
+        }
+        return map;
+    }
+    @RequestMapping("/chakaoshixiang")
+    public String chakaoshixiang(Integer pgid,Model model){
+        System.out.println("pgid"+pgid);
+        List<ExamScore> examScores = loService.selectByPGid(pgid);//根据papergradeid查找examscore表中的提交人员
+        for (ExamScore examScore : examScores) {
+            UserInfo userInfo = loService.uiselectByUserId(examScore.getUserid());
+            examScore.setUserInfo(userInfo);
+        }
+        PaperGrade paperGrade = loService.selectBypgid(pgid);/*查找该papergrade的数据*/
+        System.out.println("papergrade"+paperGrade.toString());
+        List<GradeUser> gradeUsers = loService.selectGUbyGradeId(paperGrade.getGid());/*根据班级id查找班里的所有学生*/
+        model.addAttribute("zongrenshu",gradeUsers.size());/*记录总人数*/
+        for (GradeUser gradeUser : gradeUsers) {
+            UserInfo userInfo = loService.uiselectByUserId(gradeUser.getUserid());
+            gradeUser.setUserInfo(userInfo);
+        }
+        for (int i = 0; i < examScores.size() ; i++) {
+            if(examScores.get(i).getUserid()==gradeUsers.get(i).getUserid()){
+                gradeUsers.remove(i);
+            }
+        }
+        model.addAttribute("meicheng",gradeUsers);
+        model.addAttribute("meirenshu",gradeUsers.size());
+        System.out.println("meicheng"+gradeUsers.toString());
+        model.addAttribute("wancheng",examScores);
+        model.addAttribute("wanrenshu",examScores.size());
+        System.out.println("wancheng"+examScores.toString());
+        return "kaoshixiangqing";
+    }
+/*@RequestMapping("/chakaoshixiang")
+public String chakaoshixiang(Integer pgid,Model model){
+    System.out.println("pgid"+pgid);
+    List<ExamScore> examScores = loService.selectByPGid(pgid);//根据papergradeid查找examscore表中的提交人员
+    PaperGrade paperGrade = loService.selectBypgid(pgid);*//*查找该papergrade的数据*//*
+    List<GradeUser> gradeUsers = loService.selectGUbyGradeId(paperGrade.getGid());*//*根据班级id查找班里的所有学生*//*
+
+
+    for (ExamScore examScore : examScores) {
+        Account account = loService.selectAByUserId(examScore.getUserid());
+        UserInfo userInfo = loService.uiselectByUserId(account.getAid());
+        examScore.setUserInfo(userInfo);
+        examScore.setAccount(account);
+    }
+    for (int i = 0; i < examScores.size() ; i++) {
+        if(examScores.get(i).getUserid()==gradeUsers.get(i).getUserid()){
+            gradeUsers.remove(i);
+        }
+    }
+    model.addAttribute("meicheng",gradeUsers);
+    System.out.println("meicheng"+gradeUsers.toString());
+    model.addAttribute("wancheng",examScores);
+    System.out.println("wancheng"+examScores.toString());
+    return "kaoshixiangqing";
+}*/
 
     /*跳转页面*/
     @RequestMapping("/toshujutongji")
@@ -739,16 +882,30 @@ public class LoTeacherHomeController {
     }
 
     @RequestMapping("/tozhuye")
-    public String tozhuye(){
+    public String tozhuye() {
         return "student";
     }
+
+    @RequestMapping("/teacherbuzhikaoshi")
+    public String teacherbuzhikaoshi() {
+        return "teacherbuzhikaoshi";
+    }
+    @RequestMapping("/toteacherBuZhi")
+    public String toteacherBuZhi(){
+        return "teacherBuZhi";
+    }
+
     /*测试*/
     @RequestMapping("/tostukaoshi")
     public String tostukaoshi() {
         return "stukaoshi";
     }
+
     @RequestMapping("/todostukaoshi")
-    public String todostukaoshi(){
+    public String todostukaoshi() {
         return "dostukaoshi";
     }
+
+
+
 }
