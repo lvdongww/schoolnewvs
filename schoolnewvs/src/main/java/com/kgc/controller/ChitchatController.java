@@ -5,15 +5,28 @@ import com.github.pagehelper.PageInfo;
 import com.kgc.email.Email;
 import com.kgc.email.HttpClientUtil;
 import com.kgc.pojo.*;
+import com.kgc.service.HshService;
 import com.kgc.service.LvDongService;
+import com.kgc.tools.ExcleUtils;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.math.RandomUtils;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +40,8 @@ import java.util.Map;
 public class ChitchatController {
     @Resource
     LvDongService service;
+    @Resource
+    HshService hshService;
 
     /**
      * 东，跳转聊天界面toChitchat
@@ -419,4 +434,82 @@ public class ChitchatController {
         return map;
     }
 
+    @RequestMapping("/lvAddAccount")
+    public String lvAddAccount(){
+        return "addaccount";
+    }
+    @RequestMapping("/lvUploadAction")
+    @ResponseBody
+    public Map<String,Object> upload(MultipartFile file, HttpSession session, HttpServletRequest request){
+        Map<String,Object> map=new HashMap<>();
+        Integer gid =(Integer) session.getAttribute("gid");
+        String name = file.getOriginalFilename();
+        if (name!=""){
+            String path="";
+            try {
+               path = ResourceUtils.getURL("classpath:").getPath()+"/static/touxiang";
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            String extension = FilenameUtils.getExtension(name);
+            String fileName= System.currentTimeMillis()+(RandomUtils.nextInt(100000)+"08.")+extension;
+            File file1=new File(path,fileName);
+            try {
+                file.transferTo(file1);
+
+                //1:创建workbook
+                Workbook workbook = Workbook.getWorkbook(file1);
+                //2:获取第一个工作表sheet
+                Sheet sheet = workbook.getSheet(0);
+                //3:获取数据
+                System.out.println(sheet.getRows());
+                for (int i = 1; i < sheet.getRows(); i++) {
+                    Cell cell = sheet.getCell(0, i);
+                    Cell cell1 = sheet.getCell(1, i);
+                    Cell cell2 = sheet.getCell(2, i);
+                    Cell cell3 = sheet.getCell(3, i);
+                    Cell cell4 = sheet.getCell(4, i);
+                    Cell cell5 = sheet.getCell(5, i);
+                    if (cell5.getContents().isEmpty()){
+                        break;
+                    }
+                    Account account = new Account();
+                    account.setPosid(1);
+                    account.setCreatedate(new Date());
+                    account.setAccountname(cell5.getContents());
+                    account.setPassword("123456");
+                    int hshaccount = hshService.hshaccount(account);
+                    if (hshaccount>0){
+                        Account accsel =hshService.accsel(account.getAccountname());
+                        UserInfo userInfo=new UserInfo();
+                        userInfo.setAccid(accsel.getAid());
+                        userInfo.setNickname(cell.getContents());
+                        userInfo.setAge(Integer.parseInt(cell1.getContents()));
+                        userInfo.setSex(cell2.getContents());
+                        userInfo.setAddress(cell3.getContents());
+                        userInfo.setEamil(cell4.getContents());
+                        userInfo.setPhone(cell5.getContents());
+                        int w = hshService.hshins2(userInfo);
+                        if (w>0){
+                            GradeUser gradeUser=new GradeUser();
+                            gradeUser.setUserid(userInfo.getAccid());
+                            gradeUser.setGradeid(gid);
+                            int a= hshService.hshgradeuser(gradeUser);
+                        }
+                    }
+                }
+                map.put("status","succes");
+                map.put("fileName",fileName);
+                //最后一步：关闭资源
+                workbook.close();
+            } catch (Exception e) {
+                map.put("status","error");
+                map.put("msg",e.getMessage());
+            }
+        }else{
+            map.put("status","error");
+            map.put("msg","请选择文件");
+        }
+        return map;
+    }
 }
