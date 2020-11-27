@@ -360,4 +360,23 @@ public class LoServiceImpl implements LoService {
     public PaperGrade selectBypgid(int pgid) {
         return paperGradeMapper.selectByPrimaryKey(pgid);
     }
+
+    @Override
+    public List<Releasee> selectByREGradeId(Integer gradedid) {
+        ReleaseeExample example=new ReleaseeExample();
+        example.setOrderByClause("rid desc");
+        ReleaseeExample.Criteria criteria = example.createCriteria();
+        criteria.andGradeidEqualTo(gradedid);
+        List<Releasee> releasees = releaseeMapper.selectByExample(example);
+        return releasees;
+    }
+
+    @Override
+    public List<Works> selectByRelid(Integer relid,Integer userid) {
+        WorksExample example=new WorksExample();
+        WorksExample.Criteria criteria = example.createCriteria();
+        criteria.andRelidEqualTo(relid);
+        criteria.andUseridEqualTo(userid);
+        return worksMapper.selectByExample(example);
+    }
 }

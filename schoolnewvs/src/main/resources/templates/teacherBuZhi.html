@@ -161,7 +161,7 @@
                         "                            <td>" + z.examPaper.papername + "</td>\n" +
                         "                            <td>" + z.startTime + "</td>\n" +
                         "                            <td>" + z.stopTime + "</td>\n" +
-                        "                            <td id='"+z.pgid+"'></td>\n" +
+                        "                            <td id='z"+z.pgid+"'></td>\n" +
                         "                            <td class=\"td-status\">\n" +
                         "                                <span onclick='chaxiang("+z.pgid+")' class=\"layui-btn layui-btn-container layui-btn-mini\">查询详情</span>" +
                         /*"<span class=\"layui-btn layui-btn-danger layui-btn-mini\">删除</span>" +*/
@@ -169,11 +169,11 @@
                         "                        </tr>")
                     $("#mytable").append(tr)
                     if(jie==1){
-                        $("#"+z.pgid).append("<a>未开始</a>")
+                        $("#z"+z.pgid).append("<a>未开始</a>")
                     }else if(jie==2){
-                        $("#"+z.pgid).append("<a style=\"color:lawngreen;\">考试中</a>")
+                        $("#z"+z.pgid).append("<a style=\"color:lawngreen;\">考试中</a>")
                     }else if(jie==3){
-                        $("#"+z.pgid).append("<a style=\"color:red;\">考试结束</a>")
+                        $("#z"+z.pgid).append("<a style=\"color:red;\">考试结束</a>")
                     }
                 })
             }

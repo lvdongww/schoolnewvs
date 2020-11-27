@@ -824,31 +824,33 @@ public class LoTeacherHomeController {
         System.out.println("wancheng"+examScores.toString());
         return "kaoshixiangqing";
     }
-/*@RequestMapping("/chakaoshixiang")
-public String chakaoshixiang(Integer pgid,Model model){
-    System.out.println("pgid"+pgid);
-    List<ExamScore> examScores = loService.selectByPGid(pgid);//根据papergradeid查找examscore表中的提交人员
-    PaperGrade paperGrade = loService.selectBypgid(pgid);*//*查找该papergrade的数据*//*
-    List<GradeUser> gradeUsers = loService.selectGUbyGradeId(paperGrade.getGid());*//*根据班级id查找班里的所有学生*//*
 
-
-    for (ExamScore examScore : examScores) {
-        Account account = loService.selectAByUserId(examScore.getUserid());
-        UserInfo userInfo = loService.uiselectByUserId(account.getAid());
-        examScore.setUserInfo(userInfo);
-        examScore.setAccount(account);
-    }
-    for (int i = 0; i < examScores.size() ; i++) {
-        if(examScores.get(i).getUserid()==gradeUsers.get(i).getUserid()){
-            gradeUsers.remove(i);
+    @RequestMapping("/chaHomeWorkTiJiaoQingKuang")
+    public String chaHomeWorkTiJiaoQingKuang(Integer gradeid,Model model){
+        List<Releasee> releasees = loService.selectByREGradeId(gradeid);/*查询出该班级的所有作业*/
+        model.addAttribute("zuoye",releasees);
+        List<GradeUser> gradeUsers = loService.selectGUbyGradeId(gradeid);/*查出这个班所有的学生*/
+        for(int i=0;i<gradeUsers.size();i++){
+            List<Integer> zong=new ArrayList<>();
+            for (int j = 0; j <releasees.size() ; j++) {
+                List<Works> works = loService.selectByRelid(releasees.get(j).getRid(), gradeUsers.get(i).getUserid());
+                if(works.size()>0){
+                    zong.add(1);
+                    gradeUsers.get(i).setList(zong);
+                }else{
+                    zong.add(0);
+                    gradeUsers.get(i).setList(zong);
+                }
+            }
         }
+        model.addAttribute("xuesheng",gradeUsers);
+        for (GradeUser gradeUser : gradeUsers) {
+            UserInfo userInfo = loService.uiselectByUserId(gradeUser.getUserid());
+            gradeUser.setUserInfo(userInfo);
+            System.out.println(gradeUser.toString());
+        }
+        return "HomeWorkTiJiaoQingKuang";
     }
-    model.addAttribute("meicheng",gradeUsers);
-    System.out.println("meicheng"+gradeUsers.toString());
-    model.addAttribute("wancheng",examScores);
-    System.out.println("wancheng"+examScores.toString());
-    return "kaoshixiangqing";
-}*/
 
     /*跳转页面*/
     @RequestMapping("/toshujutongji")
@@ -893,6 +895,10 @@ public String chakaoshixiang(Integer pgid,Model model){
     @RequestMapping("/toteacherBuZhi")
     public String toteacherBuZhi(){
         return "teacherBuZhi";
+    }
+    @RequestMapping("/toHomeWorkTiJiaoQingKuang")
+    public String toHomeWorkTiJiaoQingKuang(){
+        return "HomeWorkTiJiaoQingKuang";
     }
 
     /*测试*/

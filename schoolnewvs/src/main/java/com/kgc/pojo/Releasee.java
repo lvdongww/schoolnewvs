@@ -15,6 +15,18 @@ public class Releasee {
 
     private Grade grade;
 
+    @Override
+    public String toString() {
+        return "Releasee{" +
+                "rid=" + rid +
+                ", gradeid=" + gradeid +
+                ", reltitle='" + reltitle + '\'' +
+                ", relnei='" + relnei + '\'' +
+                ", reldate=" + reldate +
+                ", grade=" + grade +
+                '}';
+    }
+
     public Grade getGrade() {
         return grade;
     }
@@ -63,14 +75,4 @@ public class Releasee {
         this.reldate = reldate;
     }
 
-    @Override
-    public String toString() {
-        return "Releasee{" +
-                "rid=" + rid +
-                ", gradeid=" + gradeid +
-                ", reltitle='" + reltitle + '\'' +
-                ", relnei='" + relnei + '\'' +
-                ", reldate=" + reldate +
-                '}';
-    }
 }

@@ -44,5 +44,7 @@ public interface LoService {
     Account selectAByUserId(int userid);//根据用户id查找account表中的数据 用户类型为学生的
     List<GradeUser> selectGUbyGradeId(int gradeid);//根据班级id查找里面有多少学生
     PaperGrade selectBypgid(int pgid);//根据主键查找papergrade表中的数据
+    List<Releasee> selectByREGradeId(Integer gradedid);//根据班级id查找该班级所留的 所有作业
+    List<Works> selectByRelid(Integer relid,Integer userid);//根据布置作业的id查找works中信息
 
 }
