@@ -22,7 +22,6 @@ public interface LoService {
     int insertReply(Reply reply);//插入作业回复
     Releasee selectByRid(int rid);//查询releasee表中rid符合数据的值
 
-
     /*试卷*/
     List<ExamItems> selectByepaperid(int id);//根据试卷id查找题目
     ExamPaper selectById(int id);//根据id查找该套题
@@ -38,5 +37,14 @@ public interface LoService {
     List<PaperGrade> selectPGByGradeId(int gradeid);//根据班级id查询老师发布的任务
     Grade selcetByGradeId(int gradeid);//根据班级id查找班级
     ExamScore selectByUserIdPaperIdPgid(Integer userid,Integer paperid,Integer pgid);//根据userid paperid pgid 查找ExamScore中对应的数据
+
+    /*教员功能*/
+    int insertPaperGrade(PaperGrade paperGrade);
+    List<ExamScore> selectByPGid(Integer pgid);//根据班级id查找
+    Account selectAByUserId(int userid);//根据用户id查找account表中的数据 用户类型为学生的
+    List<GradeUser> selectGUbyGradeId(int gradeid);//根据班级id查找里面有多少学生
+    PaperGrade selectBypgid(int pgid);//根据主键查找papergrade表中的数据
+    List<Releasee> selectByREGradeId(Integer gradedid);//根据班级id查找该班级所留的 所有作业
+    List<Works> selectByRelid(Integer relid,Integer userid);//根据布置作业的id查找works中信息
 
 }

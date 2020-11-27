@@ -2,13 +2,14 @@
 <html lang="en" class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>查询学生</title>
+    <title>考试情况</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
           content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
     <link rel="stylesheet" href="/static/css/font.css">
     <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
     <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/js/xadmin.js"></script>
     <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
@@ -20,10 +21,10 @@
 <body>
 <div class="x-nav">
           <span class="layui-breadcrumb">
-            <a href="">首页</a>
-            <a href="">演示</a>
+            <!--<a href="">首页</a>
+            <a href="">演示</a>-->
             <a>
-              <cite>导航元素</cite></a>
+              <cite>考试情况</cite></a>
           </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        onclick="location.reload()" title="刷新">
@@ -34,27 +35,32 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                   <!-- <form class="layui-form layui-col-space5">
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
-                                    class="layui-icon">&#xe615;</i></button>
-                        </div>
-                    </form>-->
+                    <!-- <form class="layui-form layui-col-space5">
+                         <div class="layui-inline layui-show-xs-block">
+                             <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+                         </div>
+                         <div class="layui-inline layui-show-xs-block">
+                             <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+                         </div>
+                         <div class="layui-inline layui-show-xs-block">
+                             <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
+                                    class="layui-input">
+                         </div>
+                         <div class="layui-inline layui-show-xs-block">
+                             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+                                     class="layui-icon">&#xe615;</i></button>
+                         </div>
+                     </form>-->
+                    选择班级:<select style="width: 200px;display: inline-block;" class="form-control" id="banji" name="banji">
+                    <option id="xialachushi" value="0">您名下还没有班级</option>
+                </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="layui-btn" onclick="aj()">查询</button>
                 </div>
                 <div class="layui-card-header">
-                    <button class="layui-btn" onclick="xadmin.open('发布作业','/tofabuhomework',600,400)"><i
+                    <!--<button class="layui-btn" onclick="xadmin.open('发布作业','/tofabuhomework',600,400)"><i
                             class="layui-icon"></i>发布作业
-                    </button>
+                    </button>-->
                     <button class="layui-btn layui-btn-danger" onclick="xadmin.open('发布作业','/teacherbuzhikaoshi',1000,600)"><i
                             class="layui-icon"></i>发布考试试题
                     </button>
@@ -64,11 +70,9 @@
                         <thead>
                         <tr>
                             <th>班级</th>
-                            <th>标题</th>
-                            <th>作业内容</th>
-                            <th>发布时间</th>
-                            <th>操作</th>
-                            <th>加入时间</th>
+                            <th>试题名称</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
                             <th>状态</th>
                             <th>操作</th>
                         </thead>
@@ -93,6 +97,9 @@
         </div>
     </div>
 </div>
+<form action="/chakaoshixiang" method="post" id="chakaoshixiang">
+    <input type="hidden" name="pgid" id="zhipgid">
+</form>
 </body>
 <script type="text/javascript">
     var pageInfo;
@@ -130,12 +137,14 @@
     function aj() {
         $(".bian").remove();
         mo = $(".title").val();
+        var grade=$("#banji").val();
         var json = {
             pageNum: pageNum,
             pageSize: pageSize,
+            grade:grade
         }
         $.ajax({
-            url: "/teacherChaHomeWork",
+            url: "/chaTeacherBuZhiGradeTest",
             type: "POST",
             data: json,
             dataType: "json",
@@ -144,36 +153,80 @@
                 $(".ye").text(result.data.pageNum + "/" + result.data.pages);
                 pageInfo = result.data;
                 $.each(result.data.list, function (index, z) {
-                    var tr = $("<tr class='bian'>\n" +
-                        "                            <td onclick=\"xadmin.open('查看作业提交情况','/jsp/LoTeacherChaHomeWork.jsp',800,600)\">" + z.grade.gname + "</td>\n" +
-                        "                            <td>" + z.reltitle + "</td>\n" +
-                        "                            <td>" + z.relnei + "</td>\n" +
-                        "                            <td>" + date(z.reldate) + "</td>\n" +
-                        "                            <%--<td>超级管理员</td>\n" +
-                        "                            <td>2017-01-01 11:11:42</td>--%>\n" +
-                        "                            <td class=\"td-status\">\n" +
-                        "                                <span onclick='tiao(" + z.rid + ")' class=\"layui-btn layui-btn-container layui-btn-mini\">查询</span>" +
-                        "<span class=\"layui-btn layui-btn-danger layui-btn-mini\">删除</span>" +
-                        "</td>\n" +
+                   var jie=panduanzhuangtai(z.startTime,z.stopTime)
+                    var zi="判断失败";
 
-                        "                            <%--<td class=\"td-manage\">\n" +
-                        "                                <a onclick=\"member_stop(this,'10001')\" href=\"javascript:;\"  title=\"启用\">\n" +
-                        "                                    <i class=\"layui-icon\">&#xe601;</i>\n" +
-                        "                                </a>\n" +
-                        "                                <a title=\"编辑\"  onclick=\"xadmin.open('编辑','admin-edit.html')\" href=\"javascript:;\">\n" +
-                        "                                    <i class=\"layui-icon\">&#xe642;</i>\n" +
-                        "                                </a>\n" +
-                        "                                <a title=\"删除\" onclick=\"member_del(this,'要删除的id')\" href=\"javascript:;\">\n" +
-                        "                                    <i class=\"layui-icon\">&#xe640;</i>\n" +
-                        "                                </a>\n" +
-                        "                            </td>--%>\n" +
+                    var tr = $("<tr class='bian'>\n" +
+                        "                            <td>" + z.grade.gname + "</td>\n" +
+                        "                            <td>" + z.examPaper.papername + "</td>\n" +
+                        "                            <td>" + z.startTime + "</td>\n" +
+                        "                            <td>" + z.stopTime + "</td>\n" +
+                        "                            <td id='z"+z.pgid+"'></td>\n" +
+                        "                            <td class=\"td-status\">\n" +
+                        "                                <span onclick='chaxiang("+z.pgid+")' class=\"layui-btn layui-btn-container layui-btn-mini\">查询详情</span>" +
+                        /*"<span class=\"layui-btn layui-btn-danger layui-btn-mini\">删除</span>" +*/
+                        "</td>\n" +
                         "                        </tr>")
                     $("#mytable").append(tr)
+                    if(jie==1){
+                        $("#z"+z.pgid).append("<a>未开始</a>")
+                    }else if(jie==2){
+                        $("#z"+z.pgid).append("<a style=\"color:lawngreen;\">考试中</a>")
+                    }else if(jie==3){
+                        $("#z"+z.pgid).append("<a style=\"color:red;\">考试结束</a>")
+                    }
                 })
             }
         })
     }
+    function chaxiang(pgid) {
+/*$("#zhipgid").val(pgid);
+$("#chakaoshixiang").submit();*/
+        xadmin.open('考试详情','/chakaoshixiang?pgid='+pgid,1000,600)
+    }
+    function panduanzhuangtai(kaishi, jieshu) {
+        var xianzai = new Date(); //此时的日期
+        var pan = 0;//1.过早 2.考试中 3.过时
+        var fanhui = 0;
+        var kk = timeFormat(kaishi)
+        var jj = timeFormat(jieshu);
+        if (kk.getTime() > xianzai.getTime()) {
+            fanhui = 1
+        } else if (xianzai.getTime()>kk.getTime()&&xianzai.getTime()<jj.getTime()) {
+            fanhui = 2
+        } else if (xianzai.getTime()>jj.getTime()) {
+            fanhui = 3
+        }
+        return fanhui;
+    }
+    function timeFormat(time) {
+        var d = new Date(time.substr(0, 19));//加入substr(0, 19)处理兼容ios报错NAN
+        var year = d.getFullYear();       //年
+        var month = d.getMonth() + 1;     //月
+        var day = d.getDate();            //日
+        var hh = d.getHours();            //时
+        var mm = d.getMinutes();          //分
+        var ss = d.getSeconds();           //秒
 
+        var clock = year + "-";
+        if (month < 10)
+            clock += "0";
+        clock += month + "-";
+        if (day < 10)
+            clock += "0";
+        clock += day + " ";
+        if (hh < 10)
+            clock += "0";
+        clock += hh + ":";
+        if (mm < 10) clock += '0';
+        clock += mm + ":";
+        if (ss < 10) clock += '0';
+        clock += ss;
+        var kaishi = new Date(Date.parse(clock.replace(/-/g, "/")));
+        /*$.post("/zhuanDatetest",{date:kaishi},function (result) {
+        },"json")*/
+        return kaishi;
+    }
     function tiao(id) {
         //alert(id)
         $.post("/chuanRelid", {relid: id}, function (result) {
@@ -181,8 +234,25 @@
         })
 
     }
+    function xiala() {
+        $.post("/addHomeWork", function (result) {
+            if (result.status == false) {
+                var chu = $("<option id='000' value='0'>全部</option>");
+                $("#banji").append(chu);
+                $.each(result.data, function (index, z) {
+                    $("#xialachushi").remove();
+                    console.log(z)
+                    var xuanxiang = $("<option id='" + z.gid + "' value='" + z.gid + "'>" + z.gname + "</option>");
+                    $("#banji").append(xuanxiang);
+                })
+            } else {
 
+            }
+
+        }, "json")
+    }
     $(function () {
+        xiala()
         aj()
     })
 

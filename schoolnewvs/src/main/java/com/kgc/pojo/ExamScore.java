@@ -21,6 +21,26 @@ public class ExamScore {
 
     private ExamPaper examPaper;
 
+    private Account account;
+
+    private UserInfo userInfo;
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     public ExamPaper getExamPaper() {
         return examPaper;
     }
@@ -74,6 +94,8 @@ public class ExamScore {
                 ", errors=" + errors +
                 ", subtime=" + subtime +
                 ", examPaper=" + examPaper +
+                ", account=" + account +
+                ", userInfo=" + userInfo +
                 '}';
     }
 

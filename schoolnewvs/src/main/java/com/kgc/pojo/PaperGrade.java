@@ -17,6 +17,35 @@ public class PaperGrade {
 
     private ExamPaper examPaper;
 
+    private Grade grade;
+
+    public Grade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
+    }
+
+    public PaperGrade() {
+    }
+
+    public PaperGrade(Integer pgid, Integer pid, Integer gid, Date startTime, Date stopTime, Integer pgtype) {
+        this.pgid = pgid;
+        this.pid = pid;
+        this.gid = gid;
+        this.startTime = startTime;
+        this.stopTime = stopTime;
+        this.pgtype = pgtype;
+    }
+    public PaperGrade( Integer pid, Integer gid, Date startTime, Date stopTime, Integer pgtype) {
+        this.pid = pid;
+        this.gid = gid;
+        this.startTime = startTime;
+        this.stopTime = stopTime;
+        this.pgtype = pgtype;
+    }
+
     @Override
     public String toString() {
         return "PaperGrade{" +

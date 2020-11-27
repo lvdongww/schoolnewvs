@@ -15,6 +15,8 @@ import java.util.List;
 @Service("loService")
 public class LoServiceImpl implements LoService {
     @Resource
+    AccountMapper accountMapper;
+    @Resource
     GradeMapper gradeMapper;
     @Resource
     GradeUserMapper gradeUserMapper;
@@ -313,5 +315,68 @@ public class LoServiceImpl implements LoService {
             return null;
         }
 
+    }
+
+    @Override
+    public int insertPaperGrade(PaperGrade paperGrade) {
+        return paperGradeMapper.insert(paperGrade);
+    }
+
+    @Override
+    public  List<ExamScore> selectByPGid(Integer pgid) {
+        ExamScoreExample example=new ExamScoreExample();
+        ExamScoreExample.Criteria criteria = example.createCriteria();
+        criteria.andPgidEqualTo(pgid);
+        List<ExamScore> examScores = examScoreMapper.selectByExample(example);
+        return examScores;
+    }
+
+    @Override
+    public Account selectAByUserId(int userid) {
+        AccountExample example=new AccountExample();
+        AccountExample.Criteria criteria = example.createCriteria();
+        criteria.andAidEqualTo(userid);
+        List<Account> accounts = accountMapper.selectByExample(example);
+            return accounts.get(0);
+    }
+
+    @Override
+    public List<GradeUser> selectGUbyGradeId(int gradeid) {
+        GradeUserExample example=new GradeUserExample();
+        GradeUserExample.Criteria criteria = example.createCriteria();
+        criteria.andGradeidEqualTo(gradeid);
+        List<GradeUser> gradeUsers = gradeUserMapper.selectByExample(example);
+        List<GradeUser> zong=new ArrayList<>();
+        for (GradeUser gradeUser : gradeUsers) {
+            Account account = loService.selectAByUserId(gradeUser.getUserid());
+            if(account.getPosid()==1){
+                zong.add(gradeUser);
+            }
+        }
+        return zong;
+    }
+
+    @Override
+    public PaperGrade selectBypgid(int pgid) {
+        return paperGradeMapper.selectByPrimaryKey(pgid);
+    }
+
+    @Override
+    public List<Releasee> selectByREGradeId(Integer gradedid) {
+        ReleaseeExample example=new ReleaseeExample();
+        example.setOrderByClause("rid desc");
+        ReleaseeExample.Criteria criteria = example.createCriteria();
+        criteria.andGradeidEqualTo(gradedid);
+        List<Releasee> releasees = releaseeMapper.selectByExample(example);
+        return releasees;
+    }
+
+    @Override
+    public List<Works> selectByRelid(Integer relid,Integer userid) {
+        WorksExample example=new WorksExample();
+        WorksExample.Criteria criteria = example.createCriteria();
+        criteria.andRelidEqualTo(relid);
+        criteria.andUseridEqualTo(userid);
+        return worksMapper.selectByExample(example);
     }
 }
