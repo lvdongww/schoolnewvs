@@ -1,10 +1,7 @@
 package com.kgc.service;
 
 import com.github.pagehelper.PageInfo;
-import com.kgc.pojo.Account;
-import com.kgc.pojo.Grade;
-import com.kgc.pojo.GradeUser;
-import com.kgc.pojo.UserInfo;
+import com.kgc.pojo.*;
 
 import java.util.List;
 
@@ -38,4 +35,11 @@ public interface HshService {
     int hshgradeuser(GradeUser gradeUser);
 
     Account accsel(String accountname);
+    //查看学生请假情况
+    PageInfo<Apply> selapply(Integer pageIndex, Integer pageSize);
+    //修改学生请假状态
+    int updateapply(Apply apply);
+    int insapply(Checks Checks);
+    //查询所有班级
+    List<Grade> grade();
 }

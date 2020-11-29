@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head><script async="" src="//rcode.zongheng.com/js/sa/1.11.10/sensorsdata.min.js" charset="UTF-8"></script><script src="//hm.baidu.com/hm.js?c202865d524849216eea846069349eb9"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="https://static.zongheng.com/favicon.ico">
+    <title>修改个人信息</title>
+    <link rel="stylesheet" href="http://rcode.zongheng.com/v2018/css/basic.min.css">
+    <link rel="stylesheet" href="http://rcode.zongheng.com/v2018/css/home.min.css">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/xiu2.js"></script>
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="map.min" src="http://rcode.zongheng.com/v2018/js/map.min.js"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="zongheng" src="http://rcode.zongheng.com/v2018/js/zongheng.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="widget" src="http://rcode.zongheng.com/v2018/js/mod/widget.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="home.min" src="http://rcode.zongheng.com/v2018/js/home.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="bad" src="http://rcode.zongheng.com/v2018/js/mod/bad.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="sidebar" src="http://rcode.zongheng.com/v2018/js/mod/sidebar.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="tongji" src="http://static.zongheng.com/v2_0/js/tongji.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="stater" src="http://rcode.zongheng.com/v2018/js/mod/stater.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="aclick" src="http://rcode.zongheng.com/v2018/js/mod/aclick.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="logger" src="http://rcode.zongheng.com/v2018/js/mod/logger.min.js?v=20200430001"></script>-->
+    <!--<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="cropper" src="http://rcode.zongheng.com/v2018/js/mod/cropper.min.js?v=20200430001"></script>-->
+
+    <style>
+        .emailcss{
+            position: relative;left: 104px;bottom: 35px;
+        }
+        .xiucss{
+            float: right;
+            display: inline-block;
+            width: 70px;
+            height: 25px;
+            border: 1px solid #d32f2f;
+            border-radius: 2px;
+            font-size: 12px;
+            color: #d32f2f;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;position: relative;right: 282px;bottom: 30px;
+        }
+        .xiucss2{
+            float: right;
+            display: inline-block;
+            width: 70px;
+            height: 25px;
+            border: 1px solid #d32f2f;
+            border-radius: 2px;
+            font-size: 12px;
+            color: #d32f2f;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;position: relative;right: 282px;top: 7px;
+        }
+        .btucss{
+            width: 70px;
+            height: 25px;
+            border: 1px solid #d32f2f;
+            border-radius: 2px;
+            font-size: 12px;
+            color: #d32f2f;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;
+            position: relative;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+<form action="/hshdoupdate"  class="myfrom" method="post" enctype="multipart/form-data">
+    <section class="set-box">
+        <nav>
+            <a href="#baset" class="nav-active">基本信息</a>
+        </nav>
+        <section id="base" class="base">
+            <p class="ano-name"><i>用户名</i>
+                <input class="b-name" name="nickname" type="text"  th:value="${hshselect!=null}?${hshselect.nickname}"><b></b>
+            </p>
+            <input hidden th:value="${hshselect!=null}?${hshselect.accid}" name="accid">
+            <input hidden th:value="${hshselect!=null}?${hshselect.uid}" name="uid">
+            <p class="ano-name"><i>mm年龄</i>
+                <input name="age" class="b-name" type="text"  th:value="${hshselect!=null}?${hshselect.age}" ><b></b>
+            </p>
+            <p class="ano-name"><i>头像</i>
+                <input  type="file"  name="touxiang" >
+            </p>
+            <p class="ano-name"><i>地址</i>
+                <input name="address" class="b-name" type="text"  th:value="${hshselect!=null}?${hshselect.address}">
+            </p>
+            <p class="base-sex"><i>性别</i>
+                <input th:checked="${hshselect!=null}?${hshselect.sex=='男'}" checked type="radio" name="sex" value="男" />男
+                <input th:checked="${hshselect!=null}?${hshselect.sex=='女'}" type="radio" name="sex" value="女" />女
+            </p>
+            <p><i>绑定手机</i><input class="b-name phone" type="text" name="phone"  th:value="${hshselect!=null}?${hshselect.phone}" readonly="readonly"><a class="xiuphone" style=" position: relative;
+    left: 80px;bottom: 35px;">修改绑定</a></p>
+            <p class="ano-name" hidden  id="yan"><i>验证码：</i>
+                <input  class="b-name yanp" type="text"  ><button type="button" class="queding btucss">确定</button><b></b>
+            </p>
+            <p><i>绑定邮箱</i><input  class="b-name email emailcss" type="text" name="email" th:value="${hshselect!=null}?${hshselect.eamil}" readonly="readonly" style=""><a  class="xiuemail xiucss" style="">修改绑定</a></p>
+            <p class="ano-name" hidden  id="yan2"><i>验证码：</i>
+                <input class="b-name yan2" type="text"   ><button type="button" class="queding2 btucss">确定</button>
+            </p>
+            <p><i>个人签名</i><textarea name="qianming" th:value="${hshselect!=null}?${hshselect.qianming}" class="base-text"  id="" cols="30" rows="10"></textarea><b class="base-string">你还可以输入 100 字符</b></p>
+            <div class="base-btn" onclick="sub()">确认修改</div>
+            <div class="base-btn"><a href="/head-teacher" style="color: white">取消修改</a></div>
+        </section>
+    </section>
+</form>
+</body>
+<script>
+    function sub() {
+        $(".myfrom").submit();
+    }
+</script>
+</html>

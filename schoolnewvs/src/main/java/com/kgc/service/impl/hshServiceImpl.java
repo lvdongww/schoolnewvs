@@ -2,15 +2,14 @@ package com.kgc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.kgc.mapper.AccountMapper;
-import com.kgc.mapper.GradeMapper;
-import com.kgc.mapper.GradeUserMapper;
-import com.kgc.mapper.UserInfoMapper;
+import com.kgc.mapper.*;
 import com.kgc.pojo.*;
 import com.kgc.service.HshService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -27,6 +26,10 @@ public class hshServiceImpl implements HshService {
     GradeUserMapper gradeUserMapper;
     @Resource
     AccountMapper accountMapper;
+    @Resource
+    ApplyMapper applyMapper;
+    @Resource
+    ChecksMapper checksMapper;
     @Override
     public Grade hshGrade() {
         return (Grade) gradeMapper.selectByExample(null);
@@ -147,5 +150,33 @@ public class hshServiceImpl implements HshService {
             return accounts.get(0);
         }
         return null;
+    }
+
+    @Override
+    public PageInfo<Apply> selapply(Integer pageIndex, Integer pageSize) {
+        PageHelper.startPage(pageIndex,pageSize);
+        PageHelper.orderBy("appcrudate desc");
+        List<Apply> applies = applyMapper.selectByExample(null);
+        for (Apply apply : applies) {
+            UserInfo hshselect = hshselect(apply.getAid(), 1);
+            apply.setNickname(hshselect.getNickname());
+        }
+        PageInfo<Apply> applyPageInfo=new PageInfo<>(applies);
+        return applyPageInfo;
+    }
+    @Override
+    public int updateapply(Apply apply) {
+        System.out.println(apply.getAppid());
+       int i = applyMapper.updateByPrimaryKeySelective(apply);
+        return i;
+    }
+
+    @Override
+    public int insapply(Checks Checks) {
+        return checksMapper.insertSelective(Checks);
+    }
+    @Override
+    public List<Grade> grade() {
+        return gradeMapper.selectByExample(null);
     }
 }

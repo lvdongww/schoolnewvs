@@ -1,9 +1,7 @@
 package com.kgc.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.kgc.pojo.Account;
-import com.kgc.pojo.GradeUser;
-import com.kgc.pojo.UserInfo;
+import com.kgc.pojo.*;
 import com.kgc.service.HshService;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -73,16 +71,17 @@ public class HshController {
         System.out.println(selfenye.toString());
         return map;
     }
-    @RequestMapping("/hshdoinfo")
-    public String doinfo(Model model, HttpSession session){
+
+    @RequestMapping("/xiugai2")
+    public String doinfo2(Model model, HttpSession session){
         Integer aid =(Integer) session.getAttribute("aid");
         UserInfo hshselect = hshService.hshselect(aid,1);
-        System.out.println(hshselect);
+        System.out.println("个人信息"+hshselect);
         model.addAttribute("hshselect",hshselect);
-        return "geren";
+        return "xiugai";
     }
     @RequestMapping("/hshdoupdate")
-    public void doupdate(@Param("uid") Integer uid, @Param("accid") Integer accid, String nikename, Integer age, String phone, String sex, String address, String email, String qianming, MultipartFile touxiang, HttpServletRequest request, HttpSession session, HttpServletResponse response){
+    public void doupdate(@Param("uid") Integer uid, @Param("accid") Integer accid, String nickname, Integer age, String phone, String sex, String address, String email, String qianming, MultipartFile touxiang, HttpServletRequest request, HttpSession session, HttpServletResponse response){
         String realPath = session.getServletContext().getRealPath("static/touxiang");
         //获取文件名称
         String originalFilename = touxiang.getOriginalFilename();
@@ -102,11 +101,10 @@ public class HshController {
         //新的文件名称
         UserInfo hshselect = hshService.hshselect1(uid, 1);
         int hshupdz = hshService.hshupdz(uid, 0);
-
         System.out.println(hshupdz);
         UserInfo userInfo1=new UserInfo();
         userInfo1.setAccid(accid);
-        userInfo1.setNickname(nikename);
+        userInfo1.setNickname(nickname);
         userInfo1.setAge(age);
         userInfo1.setPhone(phone);
         userInfo1.setSex(sex);
@@ -128,8 +126,8 @@ public class HshController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            out.print("<script>alert('添加成功')</script>");
-            out.print("<script>location.href='/hshdoinfo'</script>");
+            out.print("<script>alert('修改成功')</script>");
+            out.print("<script>location.href='/xiugai2'</script>");
             out.close();
         }
         //return "student";
@@ -168,5 +166,39 @@ public class HshController {
     @RequestMapping("/hstudent")
     public String hstudent(){
         return "student";
+    }
+    @RequestMapping("/genren")
+    public String genren(){
+        return "rengen2";
+    }
+    @RequestMapping("/teacher-status")
+    public String status(){
+        return "teacher-status";
+    }
+    @RequestMapping("/teacher-k")
+    public String teacher(Integer pageIndex,Integer pageSize,Model model){
+        PageInfo<Apply> selapply = hshService.selapply(1, 5);
+        if(selapply!=null){
+            model.addAttribute("apply",selapply);
+            System.out.println("考勤"+selapply);
+        }
+        return "teacher-status";
+    }
+    @RequestMapping("/teacher-kx")
+    @ResponseBody
+    public Map<String,Object> teacherkx(Apply apply, Checks checks){
+        Map<String,Object> map=new HashMap<>();
+        int updateapply = hshService.updateapply(apply);
+        map.put("update",updateapply);
+
+        return map;
+    }
+    @RequestMapping("/teacher-kxi")
+    @ResponseBody
+    public Map<String,Object> teacherkxi(Checks checks){
+        Map<String,Object> map=new HashMap<>();
+        int insapply = hshService.insapply(checks);
+        map.put("ins",insapply);
+        return map;
     }
 }

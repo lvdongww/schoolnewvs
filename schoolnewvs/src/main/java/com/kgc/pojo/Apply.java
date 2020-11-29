@@ -17,7 +17,17 @@ public class Apply {
 
     private Integer appcount;
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     private Date appcrudate;
+    private  String nickname;
+
 
     public Integer getAppid() {
         return appid;
