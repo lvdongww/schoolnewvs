@@ -46,5 +46,11 @@ public interface LoService {
     PaperGrade selectBypgid(int pgid);//根据主键查找papergrade表中的数据
     List<Releasee> selectByREGradeId(Integer gradedid);//根据班级id查找该班级所留的 所有作业
     List<Works> selectByRelid(Integer relid,Integer userid);//根据布置作业的id查找works中信息
+    List<Timetable> selectByGradeId(List<Integer> gradeid,int grade);//根据班级id查找timetable里面该班级的信息
+    Timetable selectByTid(int id);//根据主键查找该timetable里面的数据
+    int updateTimeTable(Timetable timetable);//根据主键修改timetable里面的数据
+    int insertTimeTable(Timetable timetable);//添加timetable表中的数据
+    List<Timetable> selectByTidd(int id);//根据主键查找该timetable里面的数据
+    List<Timetable> selectByGGid(int id);//根据主键查找该timetable里面的数据
 
 }

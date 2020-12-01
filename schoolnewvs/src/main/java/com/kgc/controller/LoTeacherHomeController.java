@@ -7,6 +7,7 @@ import com.kgc.pojo.*;
 import com.kgc.service.LoService;
 import com.kgc.service.LvDongService;
 
+import com.sun.corba.se.spi.ior.ObjectKey;
 import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sound.midi.Soundbank;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -758,10 +760,10 @@ public class LoTeacherHomeController {
 
     @RequestMapping("/chaTeacherBuZhiGradeTest")
     @ResponseBody
-    public Map<String, Object> chaTeacherBuZhiGradeTest(HttpSession session, @RequestParam(name = "grade",defaultValue = "0") Integer grade,@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize) {
+    public Map<String, Object> chaTeacherBuZhiGradeTest(HttpSession session, @RequestParam(name = "grade", defaultValue = "0") Integer grade, @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize) {
         Map<String, Object> map = new HashMap<>();
         int userid = (int) session.getAttribute("aid");
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         if (grade == 0) {
             List<GradeUser> gradeUsers = loService.selectByUserIdd(userid);
             if (gradeUsers.size() < 0) {
@@ -777,79 +779,142 @@ public class LoTeacherHomeController {
                         zong.add(paperGrade);
                     }
                 }
-                PageInfo<PaperGrade> pageInfo=new PageInfo<>(zong);
+                PageInfo<PaperGrade> pageInfo = new PageInfo<>(zong);
                 map.put("data", pageInfo);
             }
         } else {
             List<PaperGrade> zong = new ArrayList<>();
-                List<PaperGrade> paperGrades = loService.selectPGByGradeId(grade);
-                for (PaperGrade paperGrade : paperGrades) {
-                    List<Grade> grades = loService.selectByGid(paperGrade.getGid());
-                    paperGrade.setGrade(grades.get(0));
-                    ExamPaper examPaper = loService.selectById(paperGrade.getPid());
-                    paperGrade.setExamPaper(examPaper);
-                    zong.add(paperGrade);
-                }
-            PageInfo<PaperGrade> pageInfo=new PageInfo<>(zong);
+            List<PaperGrade> paperGrades = loService.selectPGByGradeId(grade);
+            for (PaperGrade paperGrade : paperGrades) {
+                List<Grade> grades = loService.selectByGid(paperGrade.getGid());
+                paperGrade.setGrade(grades.get(0));
+                ExamPaper examPaper = loService.selectById(paperGrade.getPid());
+                paperGrade.setExamPaper(examPaper);
+                zong.add(paperGrade);
+            }
+            PageInfo<PaperGrade> pageInfo = new PageInfo<>(zong);
             map.put("data", pageInfo);
         }
         return map;
     }
+
     @RequestMapping("/chakaoshixiang")
-    public String chakaoshixiang(Integer pgid,Model model){
-        System.out.println("pgid"+pgid);
+    public String chakaoshixiang(Integer pgid, Model model) {
+        System.out.println("pgid" + pgid);
         List<ExamScore> examScores = loService.selectByPGid(pgid);//根据papergradeid查找examscore表中的提交人员
         for (ExamScore examScore : examScores) {
             UserInfo userInfo = loService.uiselectByUserId(examScore.getUserid());
             examScore.setUserInfo(userInfo);
         }
         PaperGrade paperGrade = loService.selectBypgid(pgid);/*查找该papergrade的数据*/
-        System.out.println("papergrade"+paperGrade.toString());
+        System.out.println("papergrade" + paperGrade.toString());
         List<GradeUser> gradeUsers = loService.selectGUbyGradeId(paperGrade.getGid());/*根据班级id查找班里的所有学生*/
-        model.addAttribute("zongrenshu",gradeUsers.size());/*记录总人数*/
+        model.addAttribute("zongrenshu", gradeUsers.size());/*记录总人数*/
         for (GradeUser gradeUser : gradeUsers) {
             UserInfo userInfo = loService.uiselectByUserId(gradeUser.getUserid());
             gradeUser.setUserInfo(userInfo);
         }
-        for (int i = 0; i < examScores.size() ; i++) {
-            if(examScores.get(i).getUserid()==gradeUsers.get(i).getUserid()){
+        for (int i = 0; i < examScores.size(); i++) {
+            if (examScores.get(i).getUserid() == gradeUsers.get(i).getUserid()) {
                 gradeUsers.remove(i);
             }
         }
-        model.addAttribute("meicheng",gradeUsers);
-        model.addAttribute("meirenshu",gradeUsers.size());
-        System.out.println("meicheng"+gradeUsers.toString());
-        model.addAttribute("wancheng",examScores);
-        model.addAttribute("wanrenshu",examScores.size());
-        System.out.println("wancheng"+examScores.toString());
+        model.addAttribute("meicheng", gradeUsers);
+        model.addAttribute("meirenshu", gradeUsers.size());
+        System.out.println("meicheng" + gradeUsers.toString());
+        model.addAttribute("wancheng", examScores);
+        model.addAttribute("wanrenshu", examScores.size());
+        System.out.println("wancheng" + examScores.toString());
         return "kaoshixiangqing";
     }
 
     @RequestMapping("/chaHomeWorkTiJiaoQingKuang")
-    public String chaHomeWorkTiJiaoQingKuang(Integer gradeid,Model model){
+    public String chaHomeWorkTiJiaoQingKuang(Integer gradeid, Model model) {
         List<Releasee> releasees = loService.selectByREGradeId(gradeid);/*查询出该班级的所有作业*/
-        model.addAttribute("zuoye",releasees);
+        model.addAttribute("zuoye", releasees);
         List<GradeUser> gradeUsers = loService.selectGUbyGradeId(gradeid);/*查出这个班所有的学生*/
-        for(int i=0;i<gradeUsers.size();i++){
-            List<Integer> zong=new ArrayList<>();
-            for (int j = 0; j <releasees.size() ; j++) {
+        for (int i = 0; i < gradeUsers.size(); i++) {
+            List<Integer> zong = new ArrayList<>();
+            for (int j = 0; j < releasees.size(); j++) {
                 List<Works> works = loService.selectByRelid(releasees.get(j).getRid(), gradeUsers.get(i).getUserid());
-                if(works.size()>0){
+                if (works.size() > 0) {
                     zong.add(1);
                     gradeUsers.get(i).setList(zong);
-                }else{
+                } else {
                     zong.add(0);
                     gradeUsers.get(i).setList(zong);
                 }
             }
         }
-        model.addAttribute("xuesheng",gradeUsers);
+        model.addAttribute("xuesheng", gradeUsers);
         for (GradeUser gradeUser : gradeUsers) {
             UserInfo userInfo = loService.uiselectByUserId(gradeUser.getUserid());
             gradeUser.setUserInfo(userInfo);
             System.out.println(gradeUser.toString());
         }
         return "HomeWorkTiJiaoQingKuang";
+    }
+
+    @RequestMapping("/chaZuoXiShiJian")
+    @ResponseBody
+    public Map<String,Object> chaZuoXiShiJian(HttpSession session, @RequestParam(name = "grade", defaultValue = "0") Integer grade, @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        Map<String, Object> map=new HashMap<>();
+        int userid=(int)session.getAttribute("aid");
+        List<GradeUser> gradeUsers = loService.selectByUserIdd(userid);
+        if(gradeUsers.size()<=0){
+            map.put("data",null);
+        }else{
+            List<Integer> zhi=new ArrayList<>();
+            for (GradeUser gradeUser : gradeUsers) {
+                zhi.add(gradeUser.getGradeid());
+            }
+            List<Timetable> timetables = loService.selectByGradeId(zhi,grade);
+            PageInfo<Timetable> pageInfo = new PageInfo<>(timetables);
+           map.put("data",pageInfo);
+        }
+        return map;
+    }
+    @RequestMapping("/xiutimetable")
+    public String xiutimetable(int tiz,Model model){
+        if(tiz==-1){
+            model.addAttribute("lei","-1");
+            System.out.println("-1");
+        }else{
+            Timetable timetable = loService.selectByTid(tiz);
+            model.addAttribute("zhi",timetable);
+            System.out.println("1");
+        }
+        return "updateZuoXiShiJian";
+    }
+    @RequestMapping("/overXiuTimeTable")
+    @ResponseBody
+    public Map<String,Object> overXiuTimeTable(Timetable timetable){
+        Map<String,Object> map=new HashMap<>();
+        int i = loService.updateTimeTable(timetable);
+        if(i>0){
+            map.put("status",true);
+        }else{
+            map.put("status",false);
+        }
+        return map;
+    }
+    @RequestMapping("/addXiuTimeTable")
+    @ResponseBody
+    public Map<String,Object> addXiuTimeTable(Timetable timetable){
+        Map<String,Object> map=new HashMap<>();
+        List<Timetable> timetable1 = loService.selectByGGid(timetable.getGid());
+        int i =0;
+        if(timetable1.size()<=0){
+             i = loService.insertTimeTable(timetable);
+            if(i>0){
+                map.put("status",true);
+            }
+        }
+        if(i<=0){
+            map.put("status",false);
+        }
+        return map;
     }
 
     /*跳转页面*/
@@ -892,13 +957,24 @@ public class LoTeacherHomeController {
     public String teacherbuzhikaoshi() {
         return "teacherbuzhikaoshi";
     }
+
     @RequestMapping("/toteacherBuZhi")
-    public String toteacherBuZhi(){
+    public String toteacherBuZhi() {
         return "teacherBuZhi";
     }
+
     @RequestMapping("/toHomeWorkTiJiaoQingKuang")
-    public String toHomeWorkTiJiaoQingKuang(){
+    public String toHomeWorkTiJiaoQingKuang() {
         return "HomeWorkTiJiaoQingKuang";
+    }
+
+    @RequestMapping("/toTeacherChaZuoYeXiShiJian")
+    public String toTeacherChaZuoYeXiShiJian() {
+        return "teacherChaZuoXishiJian";
+    }
+    @RequestMapping("/toaddZuoXiShiJian")
+    public String toaddZuoXiShiJian(){
+        return "addZuoXiShiJian";
     }
 
     /*测试*/
@@ -911,7 +987,6 @@ public class LoTeacherHomeController {
     public String todostukaoshi() {
         return "dostukaoshi";
     }
-
 
 
 }

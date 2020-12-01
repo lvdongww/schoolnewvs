@@ -9,6 +9,27 @@ public class Timetable {
 
     private String tsignoutdate;
 
+    private Grade grade;
+
+    @Override
+    public String toString() {
+        return "Timetable{" +
+                "tid=" + tid +
+                ", gid=" + gid +
+                ", tsignindate='" + tsignindate + '\'' +
+                ", tsignoutdate='" + tsignoutdate + '\'' +
+                ", grade=" + grade +
+                '}';
+    }
+
+    public Grade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
+    }
+
     public Integer getTid() {
         return tid;
     }

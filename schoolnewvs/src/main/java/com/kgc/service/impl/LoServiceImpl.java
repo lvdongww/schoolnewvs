@@ -5,10 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.kgc.mapper.*;
 import com.kgc.pojo.*;
 import com.kgc.service.LoService;
+import org.omg.CORBA.TIMEOUT;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,8 @@ public class LoServiceImpl implements LoService {
     ExamScoreDetailMapper examScoreDetailMapper;
     @Resource
     PaperGradeMapper paperGradeMapper;
+    @Resource
+    TimetableMapper timetableMapper;
     @Override
     public List<Grade> selectByGradeId(int gradeId) {
         GradeExample example=new GradeExample();
@@ -378,5 +382,60 @@ public class LoServiceImpl implements LoService {
         criteria.andRelidEqualTo(relid);
         criteria.andUseridEqualTo(userid);
         return worksMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<Timetable> selectByGradeId(List<Integer> gradeid,int grade) {
+        TimetableExample example=new TimetableExample();
+        TimetableExample.Criteria criteria = example.createCriteria();
+        if(grade==0){
+            criteria.andGidIn(gradeid);
+        }else{
+            criteria.andGidEqualTo(grade);
+        }
+        List<Timetable> timetables = timetableMapper.selectByExample(example);
+        if(timetables.size()>0){
+            for (Timetable timetable : timetables) {
+                Grade grade1 = loService.selcetByGradeId(timetable.getGid());
+                timetable.setGrade(grade1);
+            }
+        }
+        return timetables;
+    }
+
+    @Override
+    public Timetable selectByTid(int id) {
+        Timetable timetable = timetableMapper.selectByPrimaryKey(id);
+        Grade grade1 = loService.selcetByGradeId(timetable.getGid());
+        timetable.setGrade(grade1);
+        return timetable;
+    }
+
+    @Override
+    public int updateTimeTable(Timetable timetable) {
+        return timetableMapper.updateByPrimaryKeySelective(timetable);
+    }
+
+    @Override
+    public int insertTimeTable(Timetable timetable) {
+        return timetableMapper.insertSelective(timetable);
+    }
+
+    @Override
+    public List<Timetable> selectByTidd(int id) {
+        Timetable timetable = timetableMapper.selectByPrimaryKey(id);
+        Grade grade1 = loService.selcetByGradeId(timetable.getGid());
+        List<Timetable> timetables=new ArrayList<>();
+        timetables.add(timetable);
+        timetable.setGrade(grade1);
+        return timetables;
+    }
+
+    @Override
+    public List<Timetable> selectByGGid(int id) {
+        TimetableExample example=new TimetableExample();
+        TimetableExample.Criteria criteria = example.createCriteria();
+        criteria.andGidEqualTo(id);
+        return timetableMapper.selectByExample(example);
     }
 }
