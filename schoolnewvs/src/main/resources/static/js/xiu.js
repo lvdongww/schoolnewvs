@@ -66,23 +66,50 @@ function getNowFormatDate() {
     clock += ss;
     return clock;
 }
+
 function dateAddDays(dateStr,dayCount) {
         var tempDate=new Date(dateStr.replace(/-/g,"/"));//把日期字符串转换成日期格式
          var resultDate=new Date((tempDate/1000+(86400*dayCount))*1000);//增加n天后的日期
          var resultDateStr=resultDate.getFullYear()+"-"+(resultDate.getMonth()+1)+"-"+(resultDate.getDate());//将日期转化为字符串格式
         return resultDateStr;
      }
-function upd(a,b) {
+function rTime(date) {
+    var json_date = new Date(date).toJSON();
+    return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+}
+function xiu(a,b,c) {
+    var json3={
+        appid:a,
+        apptype: 0
+    }
+    $.post("/teacher-kx",json3,function (date) {
+        alert("已拒绝")
+        console.log(date);
+    })
+
+}
+function upd(a,b,c) {
+    if(c<getNowFormatDate()){
+        alert("过期")
+        return;
+    }
+    rTime(c)
+    var tempDate=new Date(c.replace(/-/g,"/"));
     var json = {
         apptype: 2,
         appid: a
     }
+    $.post("/teacher-kx",json,function (result) {
+        alert("修改成功")
+        location.href="redirect:/teacher-k"
+    })
+
     var tian;
-    for (tian=0; tian<=b;tian++) {
+    for (tian=1; tian<=b;tian++) {
         var json2 = {
             aid: a,
-            signindate:  dateAddDays(getNowFormatDate(),tian),
-            signoutdate: dateAddDays(getNowFormatDate(),tian),
+            signindate:  dateAddDays(rTime(c),tian),
+            signoutdate: dateAddDays(rTime(c),tian),
             remark: "请假",
             chtype: 4
         }
@@ -92,11 +119,6 @@ function upd(a,b) {
         })
     }
 
-    console.log(json2)
-    // $.post("/teacher-kx",json,function (result) {
-    //     alert("修改成功")
-    //     location.href="redirect:/teacher-k"
-    // })
 }
 //获取当前系统时间
 function getNowDate() {

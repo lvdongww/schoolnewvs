@@ -12,7 +12,7 @@ import java.util.List;
 public interface HshService {
     Grade hshGrade();
     List<Grade> hshList();
-    PageInfo<UserInfo> selfenye(Integer pageIndex, int pageSize, Integer accid, String name, Integer utype);
+    PageInfo<UserInfo> selfenye(Integer pageIndex, int pageSize, Integer accid, String name, Integer utype, Integer posid);
     //根据gradeid查询userid
 
     List<GradeUser> hshselg(Integer gradeid);
@@ -42,4 +42,9 @@ public interface HshService {
     int insapply(Checks Checks);
     //查询所有班级
     List<Grade> grade();
+    //学生的请假
+    List<Apply> hshapplysel(Integer aid);
+    List<Account> selaccount();
+
+    Account selhh(Integer userid);
 }

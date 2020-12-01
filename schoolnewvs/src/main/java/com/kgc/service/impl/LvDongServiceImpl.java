@@ -6,6 +6,7 @@ import com.kgc.mapper.*;
 import com.kgc.pojo.*;
 import com.kgc.service.LvDongService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
@@ -40,6 +41,8 @@ public class LvDongServiceImpl implements LvDongService {
     GradeMapper gradeMapper;
     @Resource
     GradeUserMapper gradeUserMapper;
+    @Resource
+    ApplyMapper applyMapper;
     //添加消息
     @Override
     public int addXiaoXi(XiaoXi xiaoXi) {
@@ -273,6 +276,16 @@ public class LvDongServiceImpl implements LvDongService {
         }
         PageInfo<UserInfo> pageInfo=new PageInfo<>(userInfos);
         return pageInfo;
+    }
+
+    @Override
+    public List<Apply> lvSelectSheng(Integer aid) {
+        ApplyExample applyExample=new ApplyExample();
+        ApplyExample.Criteria criteria = applyExample.createCriteria();
+        criteria.andTeacheridEqualTo(aid);
+        criteria.andApptypeEqualTo(1);
+        List<Apply> applies = applyMapper.selectByExample(applyExample);
+        return applies;
     }
 
 

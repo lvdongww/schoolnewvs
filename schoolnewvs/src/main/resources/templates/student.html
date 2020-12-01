@@ -38,12 +38,17 @@
         <li class="layui-nav-item">
             <a onclick="xadmin.add_tab('聊天','/tochitchat')"><img src="/static/images/wei.ico" width="60%" height="60%"></a>
         </li>
-        <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" onclick="qiandao()">签到
+        <button th:if="${session.Position.getPid()==1}"  data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" onclick="qiandao()">签到
         </button>
-        <a data-method="offset" data-type="auto" class="layui-btn layui-btn-normal"
+        <a th:if="${session.Position.getPid()==1}" data-method="offset" data-type="auto" class="layui-btn layui-btn-normal"
            onclick="xadmin.open('请假','/toqingjia',500,500)">请假</a>
-        <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" onclick="qiantui()">签退
+        <button th:if="${session.Position.getPid()==1}" data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" onclick="qiantui()">签退
         </button>
+        <a th:if="${session.Position.getPid()==3}" href="javaScript:void(0)" onclick="xadmin.add_tab('请假申请','/teacher-k')" style="margin-left: 5px;font-size: 20px;position:fixed; margin-top: 7px">🔔
+            <div th:if="${session.Position.getPid()==3}" class="divshu" style="width: 15px;height:15px;background-color:#222;text-align: center;
+            position:absolute;margin-top: -15px;margin-left: 10px;border-radius:50%;
+            ">1</div>
+        </a>
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
@@ -92,6 +97,11 @@
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>查看考勤</cite></a>
                     </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('我的请假','/student-c')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>我的请假</cite></a>
+                    </li>>
                 </ul>
             </li>
             <li th:if="${session.Position.getPid()==3}">
@@ -115,6 +125,11 @@
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>请假申请</cite></a>
                     </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('作息时间','/toTeacherChaZuoYeXiShiJian')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>作息时间</cite></a>
+                    </li>
                 </ul>
             </li>
             <li th:if="${session.Position.getPid()==2}">
@@ -137,6 +152,16 @@
                         <a onclick="xadmin.add_tab('试题中心','/toshitizhongxin')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>试题中心</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('发布考试','/toteacherBuZhi')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>发布考试</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('作业统计','/toHomeWorkTiJiaoQingKuang')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>作业统计</cite></a>
                     </li>
                 </ul>
             </li>
@@ -174,7 +199,18 @@
 <script>
     $(function () {
         $(".zuo li:gt(1)").remove();
+        jian();
     })
+    function xun() {
+        time = setInterval(function getoList() {
+            jian();
+        }, 3000);
+    }
+    function jian() {
+        $.post("/lvSelShen",function (result) {
+            $(".divshu").text(result.data);
+        },"json")
+    }
     function qiandao() {
         $.post("/qiandao", function (result) {
             if (result.yi == "今天已签到") {

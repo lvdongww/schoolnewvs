@@ -12,7 +12,6 @@
     <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/js/xadmin.js"></script>
     <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/xiu.js"></script>
 </head>
 <body>
 <div class="layui-card-body ">
@@ -20,42 +19,27 @@
         <thead>
         <tr>
             <th>编号</th>
-            <th>学生姓名</th>
+            <th>班主任</th>
             <th>请假留言</th>
+            <th>申请状态</th>
             <th>请假日期</th>
             <th>请假天数</th>
             <th>申请日期</th>
-            <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="app:${apply.list}">
+        <tr th:each="app:${hshapp}">
             <td th:text="${app.appid}">待确认</td>
             <td th:text="${app.nickname}">未支付</td>
             <td th:text="${app.appnei}">未发货</td>
+            <td  th:if="${app.apptype==1}">未同意</td>
+            <td  th:if="${app.apptype==2}">已同意</td>
+            <td  th:if="${app.apptype==0}">已拒绝</td>
             <td th:text="${#dates.format(app.appdate,'yyyy-MM-dd')}">其他方式</td>
             <td th:text="${app.appcount}+'天
             '">申通物流
             </td>
-            <td th:text="${#dates.format(app.appcrudate,'yyyy-MM-dd')}">2017-08-17 18:22</td>
-            <td th:if="${app.apptype==1}">
-                <button  class='layui-btn layui-btn-normal layui-btn-mini cha '
-                        th:onclick="upd([[${app.appid}]],[[${app.appcount}]],[[${app.appdate}]]);">同意
-                </button>
-                <button class='layui-btn layui-btn-normal layui-btn-mini cha '
-                        th:onclick="'xiu(\''+${app.appid}+'\',\''+${app.appcount}+'\',\''+${app.teacherid}+'\');'">拒绝
-                </button>
-            </td>
-            <td th:if="${app.apptype==0}">
-                <button class='layui-btn layui-btn-normal layui-btn-mini cha '
-                      >已拒绝
-                </button>
-            </td>
-            <td th:if="${app.apptype==2}">
-                <button class='layui-btn layui-btn-normal layui-btn-mini cha '
-                      >已同意
-                </button>
-            </td>
+            <td th:text="${#dates.format(app.appcrudate,'yyyy-MM-dd')}">其他方式</td>
         </tr>
         </tbody>
     </table>

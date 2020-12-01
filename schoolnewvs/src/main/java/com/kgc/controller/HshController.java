@@ -19,10 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author shkstart
@@ -59,14 +56,24 @@ public class HshController {
     public Map<String, Object> selgbyu(Integer gid) {
         Map<String, Object> map = new HashMap<>();
         List<GradeUser> hshselg = hshService.hshselg(gid);
-        map.put("hshselg",hshselg);
+        List<GradeUser> hshselg1=new ArrayList<>();
+        for (GradeUser gradeUser : hshselg) {
+            Account aid=hshService.selhh(gradeUser.getUserid());
+            if (aid.getPosid()==1){
+                GradeUser gradeUser1=new GradeUser();
+                gradeUser1.setGradeid(gid);
+                gradeUser1.setUserid(aid.getAid());
+                hshselg1.add(gradeUser1);
+            }
+        }
+        map.put("hshselg",hshselg1);
         return map;
     }
     @RequestMapping("/selinfo")
     @ResponseBody
     public Map<String, Object> selinfo(Integer pageindex,Integer  pagesize,Integer gid,String name,Integer utype) {
         Map<String, Object> map = new HashMap<>();
-        PageInfo<UserInfo> selfenye = hshService.selfenye(pageindex, pagesize, gid, name,utype);
+        PageInfo<UserInfo> selfenye = hshService.selfenye(pageindex, pagesize, gid, name,utype,1);
         map.put("selfenye",selfenye);
         System.out.println(selfenye.toString());
         return map;
@@ -186,11 +193,10 @@ public class HshController {
     }
     @RequestMapping("/teacher-kx")
     @ResponseBody
-    public Map<String,Object> teacherkx(Apply apply, Checks checks){
+    public Map<String,Object> teacherkx(Apply apply){
         Map<String,Object> map=new HashMap<>();
         int updateapply = hshService.updateapply(apply);
         map.put("update",updateapply);
-
         return map;
     }
     @RequestMapping("/teacher-kxi")
@@ -201,4 +207,13 @@ public class HshController {
         map.put("ins",insapply);
         return map;
     }
+
+    @RequestMapping("/student-c")
+    public String student_c(Model model,HttpSession session){
+        Integer aid =(Integer) session.getAttribute("aid");
+        List<Apply> hshapplysel = hshService.hshapplysel(aid);
+        model.addAttribute("hshapp",hshapplysel);
+        return "askstudent";
+    }
+
 }

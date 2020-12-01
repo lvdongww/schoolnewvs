@@ -512,4 +512,13 @@ public class ChitchatController {
         }
         return map;
     }
+    @RequestMapping("/lvSelShen")
+    @ResponseBody
+    public Map<String,Object> lvSel(HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        Integer aid = (Integer)session.getAttribute("aid");
+        List<Apply> applies = service.lvSelectSheng(aid);
+        map.put("data",applies.size());
+        return map;
+    }
 }

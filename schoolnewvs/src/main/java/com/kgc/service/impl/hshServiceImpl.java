@@ -40,7 +40,7 @@ public class hshServiceImpl implements HshService {
     }
 
     @Override
-    public PageInfo<UserInfo> selfenye(Integer pageIndex, int pageSize, Integer accid, String name, Integer utype) {
+    public PageInfo<UserInfo> selfenye(Integer pageIndex, int pageSize, Integer accid, String name, Integer utype,Integer posid) {
         UserInfoExample example=new UserInfoExample();
         UserInfoExample.Criteria criteria = example.createCriteria();
         if(name !=""){
@@ -166,7 +166,6 @@ public class hshServiceImpl implements HshService {
     }
     @Override
     public int updateapply(Apply apply) {
-        System.out.println(apply.getAppid());
        int i = applyMapper.updateByPrimaryKeySelective(apply);
         return i;
     }
@@ -179,4 +178,29 @@ public class hshServiceImpl implements HshService {
     public List<Grade> grade() {
         return gradeMapper.selectByExample(null);
     }
+
+    @Override
+    public List<Apply> hshapplysel(Integer aid) {
+       ApplyExample example=new ApplyExample();
+        ApplyExample.Criteria criteria = example.createCriteria();
+        criteria.andAidEqualTo(aid);
+        List<Apply> applies = applyMapper.selectByExample(example);
+        for (Apply apply : applies) {
+            UserInfo hshselect = hshselect(apply.getTeacherid(), 1);
+            apply.setNickname(hshselect.getNickname());
+        }
+        return applies;
+    }
+
+    @Override
+    public List<Account> selaccount() {
+        return accountMapper.selectByExample(null);
+    }
+
+    @Override
+    public Account selhh(Integer userid) {
+        return accountMapper.selectByPrimaryKey(userid);
+    }
+
+
 }

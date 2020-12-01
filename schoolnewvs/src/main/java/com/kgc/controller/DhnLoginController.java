@@ -218,7 +218,8 @@ public class DhnLoginController {
             String substring = gindate.substring(0, 2);
             int inh = Integer.parseInt(substring);
             //比较
-            if (qianh < inh && qianh == inh) {
+            System.out.println(qianh+"============"+inh);
+            if (qianh < inh || qianh == inh) {
                 map.put("qian", "签到成功");
                 checks.setRemark("考勤成功");
                 checks.setChtype(1);
