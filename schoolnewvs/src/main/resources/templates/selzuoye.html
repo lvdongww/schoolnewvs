@@ -62,17 +62,19 @@
                         </tr>
                         </tbody>
                     </table>
-                    <center><span style="color: red" th:text="${msg}"></span></center>
+                    <center><span style="color: red" th:text="${session.msg}"></span></center>
                 </div>
                 <center>
-                    <div>
-                        <a th:href="@{'?pn='+${list.firstPage}}">首页</a>
-                        <a th:href="@{'?pn='+${list.prePage}}">上一页</a>
-                        <span th:each="i:${list.navigatepageNums}">
-                        <a th:href="@{'?pn='+${i}}" th:text="${i}"></a>
+                    <div class="page">
+                        <div>
+                            <a class="num" th:href="@{'?pn='+${list.firstPage}}">首页</a>
+                            <a class="prev" th:href="@{'?pn='+${list.prePage}}">&lt;&lt;</a>
+                            <span th:each="i:${list.navigatepageNums}">
+                        <a class="current" th:href="@{'?pn='+${i}}" th:text="${i}"></a>
                             </span>
-                        <a th:href="@{'?pn='+${list.nextPage}}">下一页</a>
-                        <a th:href="@{'?pn='+${list.lastPage}}">尾页</a>
+                            <a class="next" th:href="@{'?pn='+${list.nextPage}}">&gt;&gt;</a>
+                            <a class="num" th:href="@{'?pn='+${list.lastPage}}">尾页</a>
+                        </div>
                     </div>
                 </center>
             </div>

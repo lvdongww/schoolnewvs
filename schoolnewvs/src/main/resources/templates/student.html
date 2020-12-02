@@ -101,7 +101,7 @@
                         <a onclick="xadmin.add_tab('我的请假','/student-c')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>我的请假</cite></a>
-                    </li>>
+                    </li>
                 </ul>
             </li>
             <li th:if="${session.Position.getPid()==3}">
@@ -217,7 +217,7 @@
                 alert("今天已经签到过了孩子!");
                 return false;
             }
-            if (result.qian == "考勤成功") {
+            if (result.qian == "签到成功") {
                 alert("签到成功");
             } else {
                 alert("签到成功,但是你迟到了!");

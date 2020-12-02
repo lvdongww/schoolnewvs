@@ -16,6 +16,7 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <!--[endif]-->
+    <link rel="stylesheet" href="/static/lib/layui/css/layui.css" media="all">
 </head>
 <body>
 <div class="x-nav">
@@ -37,26 +38,35 @@
                 </div>
                 <div class="layui-card-header">
                 </div>
-                <form action="/tijiaozuoye" method="post" enctype="multipart/form-data">
-                    <div class="layui-card-body layui-table-body layui-table-main">
-                        <table class="layui-table layui-form">
-                            <thead>
-                            <tr>
-                                <th>作业标题</th>
-                                <th>作业内容</th>
-                                <th>作业</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td th:text="${session.worktitle}"><input type="text" name="wortitle"/></td>
-                                <td><input type="text" name="wornei"/></td>
-                                <td><input name="wornei1" type="file"></td>
-                                <td><input type="submit" value="提交"/></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <form class="layui-form" action="/tijiaozuoye" method="post" enctype="multipart/form-data">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">作业标题</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="wortitle" required lay-verify="required" placeholder="请输入作业标题"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">完成情况</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="wornei" required lay-verify="required"
+                                   placeholder="请输入作业完成情况"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>上传作业截图</legend>
+                    </fieldset>
+                    <div style="margin-left: 40px;border: 1px rgb(230,230,230) solid;width: 300px;height: 50px">
+                        <input type="file" name="wornei1" style="margin-top: 11px;margin-left: 5px"/>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input class="layui-btn" lay-submit lay-filter="formDemo" type="submit" value="提交"
+                                   style="margin-top: 10px"/>
+                            <button type="reset" class="layui-btn layui-btn-primary" style="margin-top: 10px">重置
+                            </button>
+                        </div>
                     </div>
                 </form>
                 <a class="layui-btn" th:href="@{/selzuoye}" style="margin-left: 540px">返回</a>
@@ -65,4 +75,17 @@
     </div>
 </div>
 </body>
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
 </html>

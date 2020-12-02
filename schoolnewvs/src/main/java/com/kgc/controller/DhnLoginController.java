@@ -9,6 +9,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -165,11 +167,16 @@ public class DhnLoginController {
         works.setUserid(aid);
         works.setRelid(rid);
         works.setWordate(new Date());
-        String realPath = session.getServletContext().getRealPath("static/image");
+        String path="";
+        try {
+            path = ResourceUtils.getURL("classpath:").getPath()+"/static/touxiang";
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         String originalFilename = wornei1.getOriginalFilename();
         String extension = FilenameUtils.getExtension(originalFilename);
         String newName = System.currentTimeMillis() + (RandomUtils.nextInt(10000)) + "_." + extension;
-        File file = new File(realPath, newName);
+        File file = new File(path, newName);
         try {
             wornei1.transferTo(file);
         } catch (IOException e) {
@@ -210,19 +217,34 @@ public class DhnLoginController {
             //签到时间截取小时转为int
             String indate = qiandate.substring(11, 13);
             int qianh = Integer.parseInt(indate);
-            //根据班级id查询对应班级的时间表截取小时
+            //签到时间截取分钟转为int
+            String qianmin = qiandate.substring(14, 16);
+            int qianm = Integer.parseInt(qianmin);
+            //根据班级id查询对应班级的时间表
             Timetable selgtime = dhnService.selgtime(gid);
             String gindate = selgtime.getTsignindate();
             String goutdate = selgtime.getTsignoutdate();
-            //转为int
+            //截取小时转为int
             String substring = gindate.substring(0, 2);
             int inh = Integer.parseInt(substring);
+            //截取分钟转为int
+            String substring1 = gindate.substring(3, 5);
+            int inm = Integer.parseInt(substring1);
             //比较
-            System.out.println(qianh+"============"+inh);
-            if (qianh < inh || qianh == inh) {
+            if (qianh < inh) {
                 map.put("qian", "签到成功");
                 checks.setRemark("考勤成功");
                 checks.setChtype(1);
+            } else if (qianh == inh) {
+                if (qianm < inm || qianm == inm) {
+                    map.put("qian", "签到成功");
+                    checks.setRemark("考勤成功");
+                    checks.setChtype(1);
+                } else {
+                    map.put("qian", "迟到");
+                    checks.setRemark("迟到");
+                    checks.setChtype(3);
+                }
             } else if (qianh > inh) {
                 map.put("qian", "迟到");
                 checks.setRemark("迟到");
@@ -252,15 +274,25 @@ public class DhnLoginController {
             //签到时间截取小时转为int
             String indate = qiandate.substring(11, 13);
             int qianh = Integer.parseInt(indate);
-            //根据班级id查询对应班级的时间表截取小时
+            //签到时间截取分钟转为int
+            String substring = qiandate.substring(14, 16);
+            int qianm = Integer.parseInt(substring);
+            //根据班级id查询对应班级的时间表
             Timetable selgtime = dhnService.selgtime(gid);
             String goutdate = selgtime.getTsignoutdate();
-            //转为int
+            //截取小时转为int
             String substring1 = goutdate.substring(0, 2);
             int outh = Integer.parseInt(substring1);
+            //截取分钟转为int
+            String substring2 = goutdate.substring(3, 5);
+            int outm = Integer.parseInt(substring2);
             //比较
             if (qianh > outh) {
                 map.put("qian", "考勤成功");
+            } else if (qianh == outh) {
+                if (qianm > outm || qianm == outm) {
+                    map.put("qian", "考勤成功");
+                }
             } else if (qianh < outh) {
                 if (checks.getChtype() == 1) {
                     checks.setRemark("早退");

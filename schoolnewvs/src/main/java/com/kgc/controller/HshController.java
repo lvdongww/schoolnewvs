@@ -8,6 +8,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -89,7 +91,12 @@ public class HshController {
     }
     @RequestMapping("/hshdoupdate")
     public void doupdate(@Param("uid") Integer uid, @Param("accid") Integer accid, String nickname, Integer age, String phone, String sex, String address, String email, String qianming, MultipartFile touxiang, HttpServletRequest request, HttpSession session, HttpServletResponse response){
-        String realPath = session.getServletContext().getRealPath("static/touxiang");
+        String path="";
+        try {
+            path = ResourceUtils.getURL("classpath:").getPath()+"/static/touxiang";
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         //获取文件名称
         String originalFilename = touxiang.getOriginalFilename();
         //获取文件名称的后缀
@@ -98,7 +105,7 @@ public class HshController {
         if (!originalFilename.equals("")){
             fileName = System.currentTimeMillis()+ RandomUtils.nextInt(1000000)+"."+extension;
             System.out.println(originalFilename);
-            File file1=new File(realPath,fileName);
+            File file1=new File(path,fileName);
             try {
                 touxiang.transferTo(file1);
             } catch (IOException e) {

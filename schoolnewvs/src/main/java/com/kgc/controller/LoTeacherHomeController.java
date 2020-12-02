@@ -798,7 +798,7 @@ public class LoTeacherHomeController {
         return map;
     }
 
-    @RequestMapping("/chakaoshixiang")
+    @RequestMapping("chakaoshixiang")
     public String chakaoshixiang(Integer pgid, Model model) {
         System.out.println("pgid" + pgid);
         List<ExamScore> examScores = loService.selectByPGid(pgid);//根据papergradeid查找examscore表中的提交人员
@@ -819,6 +819,21 @@ public class LoTeacherHomeController {
                 gradeUsers.remove(i);
             }
         }
+        List<Integer> userid=new ArrayList<>();
+        for (int i = 0; i <examScores.size() ; i++) {/*将已经完成的同学在没完成的list中删除*/
+            userid.add(examScores.get(i).getUserid());
+            /*System.out.println(examScores.get(i).getUserid());*/
+        }
+        System.out.println("======");
+        for (int i = 0; i <userid.size() ; i++) {
+            for (int j = 0; j <gradeUsers.size() ; j++) {
+                System.out.println("mei"+gradeUsers.get(j).getUserid()+":wan"+userid.get(i));
+                if(gradeUsers.get(j).getUserid()==userid.get(i)){
+                    gradeUsers.remove(j);
+                    /*System.out.println("删除了"+gradeUsers.get(i).getUserid());*/
+                }
+            }
+        }
         model.addAttribute("meicheng", gradeUsers);
         model.addAttribute("meirenshu", gradeUsers.size());
         System.out.println("meicheng" + gradeUsers.toString());
@@ -827,7 +842,6 @@ public class LoTeacherHomeController {
         System.out.println("wancheng" + examScores.toString());
         return "kaoshixiangqing";
     }
-
     @RequestMapping("/chaHomeWorkTiJiaoQingKuang")
     public String chaHomeWorkTiJiaoQingKuang(Integer gradeid, Model model) {
         List<Releasee> releasees = loService.selectByREGradeId(gradeid);/*查询出该班级的所有作业*/
