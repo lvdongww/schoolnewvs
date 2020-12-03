@@ -987,6 +987,10 @@ public class LoTeacherHomeController {
     public String toaddZuoXiShiJian(){
         return "addZuoXiShiJian";
     }
+    @RequestMapping("/toLoTeacherAddHuiFU")
+    public String toLoTeacherAddHuiFU(){
+        return "LoTeacherAddHuiFU";
+    }
 
     /*测试*/
     @RequestMapping("/tostukaoshi")

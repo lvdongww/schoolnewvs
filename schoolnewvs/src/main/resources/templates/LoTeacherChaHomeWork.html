@@ -97,9 +97,9 @@
     }
 
     function tiao(wid) {
-        alert(wid)
+        //alert(wid)
         $.post("/chuanWid", {wid: wid}, function (result) {
-            xadmin.open('发送回复', '/jsp/LoTeacherAddHuiFU.jsp', 600, 400)
+            xadmin.open('发送回复', 'toLoTeacherAddHuiFU', 600, 400)
         })
     }
 
