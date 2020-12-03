@@ -3,6 +3,7 @@ package com.kgc.controller;
 import com.github.pagehelper.PageInfo;
 import com.kgc.pojo.*;
 import com.kgc.service.HshService;
+import com.kgc.service.LvDongService;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.ibatis.annotations.Param;
@@ -31,14 +32,24 @@ import java.util.*;
 public class HshController {
     @Resource
     HshService hshService;
-
+    @Resource
+    LvDongService lvDongService;
     @RequestMapping("/hshsel2")
     @ResponseBody
-    public Map<String, Object> hshsel2() {
+    public Map<String, Object> hshsel2(HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        List<UserInfo> hshsunm = hshService.hshsunm();
-        System.out.println(hshsunm);
-        map.put("selsum", hshsunm);
+        List<UserInfo> userInfos = new ArrayList<>();
+        Integer aid=(Integer) session.getAttribute("aid");
+        List<Grade> grades = lvDongService.lvSelectGrade(aid);
+        for (Grade grade : grades) {
+            UserInfo userInfo=new UserInfo();
+            userInfo.setGname(grade.getGname());
+            userInfo.setGradeid(grade.getGid());
+            PageInfo<UserInfo> userInfoPageInfo = lvDongService.lvSelectToDay(1, 5, grade.getGid());
+            userInfo.setPersonsum((int)userInfoPageInfo.getTotal());
+            userInfos.add(userInfo);
+        }
+        map.put("selsum", userInfos);
         return map;
     }
     @RequestMapping("/hshsel3")
@@ -214,13 +225,44 @@ public class HshController {
         map.put("ins",insapply);
         return map;
     }
-
+    @RequestMapping("/student-ccc")
+    @ResponseBody
+    public Map<String,Object> student_c(Integer pageIndex,Integer pageSize,Integer aid){
+        Map<String,Object> map=new HashMap<>();
+        PageInfo<Apply> hshapplysel = hshService.hshapplysel(pageIndex,pageSize,aid);
+        System.out.println("请假"+hshapplysel.toString());
+        map.put("data",hshapplysel);
+        return map;
+    }
     @RequestMapping("/student-c")
-    public String student_c(Model model,HttpSession session){
-        Integer aid =(Integer) session.getAttribute("aid");
-        List<Apply> hshapplysel = hshService.hshapplysel(aid);
-        model.addAttribute("hshapp",hshapplysel);
+    public String student_ccc(){
         return "askstudent";
+    }
+
+    @RequestMapping("/doaddgrade")
+    @ResponseBody
+    public Map<String,Object> doaddgrade(String grade,HttpSession session){
+        Map<String,Object> map=new HashMap<>();
+        Grade grade2=new Grade();
+        grade2.setGname(grade);
+        int addgrade = hshService.addgrade(grade2);
+        Integer aid =(Integer) session.getAttribute("aid");
+        List<Grade> addsel= hshService.addsel(grade2.getGname());
+        System.out.println("id"+addsel.get(0).getGid());
+        GradeUser gradeUser=new GradeUser();
+        gradeUser.setUserid(aid);
+        gradeUser.setGradeid(addsel.get(0).getGid());
+        int addgradeuser = hshService.addgradeuser(gradeUser);
+        map.put("addgradeuser",addgradeuser);
+        return map;
+    }
+    @RequestMapping("/doselgradename")
+    @ResponseBody
+    public Map<String,Object> doselgradename(String grade){
+        Map<String,Object> map=new HashMap<>();
+        List<Grade> grades = hshService.addsel(grade);
+        map.put("grades",grades.size());
+        return map;
     }
 
 }

@@ -142,25 +142,21 @@ public class LoTeacherHomeController {
 
     @RequestMapping("/teacherChaHomeWork")
     @ResponseBody
-    public Map<String, Object> TeacherChaHomeWord(HttpSession session, Integer pageNum, Integer pageSize) {
+    public Map<String, Object> TeacherChaHomeWord(HttpSession session, Integer pageNum, Integer pageSize,Integer banji) {
         System.out.println("pageNum" + pageNum);
         System.out.println("pageSize" + pageSize);
-
         Map<String, Object> map = new HashMap<>();
         int aid = (int) session.getAttribute("aid");
-
         List<GradeUser> gradeUsers = loService.selectByUserIdd(aid);//根据id查找名下有多少个班级
-
-        List<Releasee> releaseesZong = new ArrayList<>();
-        PageInfo<Releasee> releaseePageInfo = null;
-        for (int i = 0; i < gradeUsers.size(); i++) {
-            releaseePageInfo = loService.selectByGradeIdd(pageNum, pageSize, gradeUsers.get(i).getGradeid());
-            for (int j = 0; j < releaseePageInfo.getList().size(); j++) {
-                releaseesZong.add(releaseePageInfo.getList().get(j));
-            }
+        List<Integer> gradeid=new ArrayList<>();
+        for (GradeUser gradeUser : gradeUsers) {
+            System.out.println(gradeUser.toString());
+            gradeid.add(gradeUser.getGradeid());
         }
-
-        map.put("data", releaseePageInfo);
+        PageHelper.startPage(pageNum,pageSize);
+            List<Releasee> releasees = loService.selectREByGradeId(gradeid,banji);
+        PageInfo<Releasee> pageInfo = new PageInfo<>(releasees);
+        map.put("data", pageInfo);
         return map;
     }
 
@@ -798,7 +794,7 @@ public class LoTeacherHomeController {
         return map;
     }
 
-    @RequestMapping("chakaoshixiang")
+    @RequestMapping("/chakaoshixiang")
     public String chakaoshixiang(Integer pgid, Model model) {
         System.out.println("pgid" + pgid);
         List<ExamScore> examScores = loService.selectByPGid(pgid);//根据papergradeid查找examscore表中的提交人员
@@ -842,6 +838,7 @@ public class LoTeacherHomeController {
         System.out.println("wancheng" + examScores.toString());
         return "kaoshixiangqing";
     }
+
     @RequestMapping("/chaHomeWorkTiJiaoQingKuang")
     public String chaHomeWorkTiJiaoQingKuang(Integer gradeid, Model model) {
         List<Releasee> releasees = loService.selectByREGradeId(gradeid);/*查询出该班级的所有作业*/

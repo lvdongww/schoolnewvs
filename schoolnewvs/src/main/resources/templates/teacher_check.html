@@ -175,13 +175,17 @@
                 console.log(result)
                 pageInfo=result.data;
                 $(".ye1").text(pageNum1+"/"+result.data.pages)
-
-
+                var toDay2="";
+                if (parseInt(toDay.substring(8,9))==0){
+                    toDay2=toDay.substring(9,10);
+                }else{
+                    toDay2=toDay.substring(8,10);
+                }
                 $.each(result.data.list,function (i,v) {
                     var tr=$(" <tr>\n" +
                         "                    <th>"+v.nickname+"</th>\n" +
                         "                    <th>"+v.gname+"</th>\n" +
-                        "                    <th>"+toDay.substring(8,10)+"</th>\n" +
+                        "                    <th>"+toDay2+"</th>\n" +
                         "                    <th>"+v.count+"</th>\n" +
                         "                    </tr>")
                     $(".thisMonth").append(tr);

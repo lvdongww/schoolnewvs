@@ -66,7 +66,6 @@ function getNowFormatDate() {
     clock += ss;
     return clock;
 }
-
 function dateAddDays(dateStr,dayCount) {
         var tempDate=new Date(dateStr.replace(/-/g,"/"));//把日期字符串转换成日期格式
          var resultDate=new Date((tempDate/1000+(86400*dayCount))*1000);//增加n天后的日期
@@ -84,17 +83,25 @@ function xiu(a,b,c) {
     }
     $.post("/teacher-kx",json3,function (date) {
         alert("已拒绝")
-        console.log(date);
     })
-
 }
+var bo=false;
 function upd(a,b,c) {
+    time=c;
     if(c<getNowFormatDate()){
+        var json4={
+            appid:a,
+            apptype:3
+        }
+        $.post("/teacher-kx",json4,function (date1) {
+            
+        })
         alert("过期")
         return;
     }
     rTime(c)
     var tempDate=new Date(c.replace(/-/g,"/"));
+    alert(rTime(c))
     var json = {
         apptype: 2,
         appid: a
@@ -114,11 +121,15 @@ function upd(a,b,c) {
             chtype: 4
         }
         console.log(json2)
-        $.post("/teacher-kxi",json2,function (data) {
-            location.href="redirect:/teacher-k"
-        })
-    }
+        if(bo){
+            $.post("/teacher-kxi",json2,function (data) {
+                location.href="redirect:/teacher-k"
+            })
+        }else {
+            alert("已过期")
+        }
 
+    }
 }
 //获取当前系统时间
 function getNowDate() {

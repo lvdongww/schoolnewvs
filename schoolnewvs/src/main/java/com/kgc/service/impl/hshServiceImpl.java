@@ -180,7 +180,8 @@ public class hshServiceImpl implements HshService {
     }
 
     @Override
-    public List<Apply> hshapplysel(Integer aid) {
+    public PageInfo<Apply> hshapplysel(Integer pageIndex,Integer pageSize,Integer aid) {
+        PageHelper.startPage(pageIndex,pageSize);
        ApplyExample example=new ApplyExample();
         ApplyExample.Criteria criteria = example.createCriteria();
         criteria.andAidEqualTo(aid);
@@ -189,7 +190,8 @@ public class hshServiceImpl implements HshService {
             UserInfo hshselect = hshselect(apply.getTeacherid(), 1);
             apply.setNickname(hshselect.getNickname());
         }
-        return applies;
+        PageInfo<Apply> applyPageInfo=new PageInfo<>(applies);
+        return applyPageInfo;
     }
 
     @Override
@@ -200,6 +202,29 @@ public class hshServiceImpl implements HshService {
     @Override
     public Account selhh(Integer userid) {
         return accountMapper.selectByPrimaryKey(userid);
+    }
+
+    @Override
+    public int addgrade(Grade grade) {
+        return gradeMapper.insertSelective(grade);
+    }
+
+    @Override
+    public int addgradeuser(GradeUser gradeUser) {
+        return gradeUserMapper.insertSelective(gradeUser);
+    }
+
+    @Override
+    public List<Grade> addsel(String grade) {
+        GradeExample example=new GradeExample();
+        GradeExample.Criteria criteria = example.createCriteria();
+        criteria.andGnameEqualTo(grade);
+        return gradeMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<Grade> addsel2() {
+        return gradeMapper.selectByExample(null);
     }
 
 

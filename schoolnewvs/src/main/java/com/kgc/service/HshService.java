@@ -43,8 +43,11 @@ public interface HshService {
     //查询所有班级
     List<Grade> grade();
     //学生的请假
-    List<Apply> hshapplysel(Integer aid);
+    PageInfo<Apply> hshapplysel(Integer pageIndex, Integer pageSize, Integer aid);
     List<Account> selaccount();
-
     Account selhh(Integer userid);
+    int addgrade(Grade grade);
+    int addgradeuser(GradeUser gradeUser);
+   List<Grade>  addsel(String grade);
+   List<Grade> addsel2();
 }

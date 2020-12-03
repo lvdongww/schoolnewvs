@@ -186,6 +186,24 @@ public class LoServiceImpl implements LoService {
     }
 
     @Override
+    public List<Releasee> selectREByGradeId(List<Integer> integers,int gradeid) {
+        ReleaseeExample example=new ReleaseeExample();
+        example.setOrderByClause("rid desc");
+        ReleaseeExample.Criteria criteria = example.createCriteria();
+        if(gradeid!=0){
+            criteria.andGradeidEqualTo(gradeid);
+        }else{
+            criteria.andGradeidIn(integers);
+        }
+        List<Releasee> releasees = releaseeMapper.selectByExample(example);
+        for (Releasee releasee : releasees) {
+            Grade grade = loService.selcetByGradeId(releasee.getGradeid());
+            releasee.setGrade(grade);
+        }
+        return releasees;
+    }
+
+    @Override
     public UserInfo uiselectByUserId(int id) {
         UserInfoExample example=new UserInfoExample();
         UserInfoExample.Criteria criteria = example.createCriteria();

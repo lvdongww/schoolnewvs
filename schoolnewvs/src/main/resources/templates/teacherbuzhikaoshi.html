@@ -220,7 +220,7 @@
     function buzhi(paperid) {
 
         var banji = $("#banji").val();
-        var banjiname = $("#banji").text();
+        var banjiname = $("#banji").html();
         var tiname = $("#" + paperid + "name").text();
         var kaishi = $("#kaishi").val();
         var jieshu = $("#jieshu").val();
@@ -241,7 +241,7 @@
         } else if (jieshu == "") {
             alert("您未输入结束时间")
         } else if (fanhui == 0) {
-            var flag = confirm("您确定要给" + banjiname.trim() + "发布《" + tiname + "》考试吗？？？");
+            var flag = confirm("您确定要发布《" + tiname + "》考试吗？？？");
             if (flag) {
                 var zhi = {
                     pid: paperid,

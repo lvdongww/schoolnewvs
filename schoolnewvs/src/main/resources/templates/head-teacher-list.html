@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -13,7 +13,8 @@
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 </head>
 <body>
-<div class="layui-card-body ">
+<div class="layui-card-body">
+   班级名称： <input type="text" name="gname" class="layui-input name" onblur="yichu()" style="width: 20%;display: inline-block"><button class="layui-btn " onclick="add()" style="margin-left: 20px;">添加</button>
     <table class="layui-table layui-form table-a">
         <tr>
             <th>ID</th>
@@ -25,7 +26,30 @@
 </body>
 </html>
 <script>
-    $(document).ready(function () {
+    var bo=false;
+    function add() {
+        var name=$(".name").val();
+        var json={
+            "grade":name
+        }
+        if(name==""){
+            alert("请输入班级名称");
+            return;
+        }
+        if(bo){
+            $.post("/doaddgrade",json,function (result) {
+                if(result.addgradeuser>0){
+                    alert("添加成功")
+                    cha();
+                }else {
+                    alert("添加失败")
+                }
+            })
+        }else {
+            alert("该班级已存在")
+        }
+    }
+    function cha() {
         $.ajax({
             type:"GET",
             url:"/hshsel2",
@@ -41,5 +65,22 @@
                 })
             }
         })
+    }
+    $(document).ready(function () {
+       cha();
     })
+    function yichu() {
+        var name=$(".name").val();
+           var json={
+               "grade":name
+           }
+           $.post("/doselgradename",json,function (result) {
+              if(result.grades>0){
+                  alert("该班级已存在")
+                  bo=false;
+              }else {
+                  bo=true;
+              }
+           })
+    }
 </script>

@@ -226,6 +226,40 @@
     }
 
     function qiantui() {
+        var newDate=new Date();
+        var qiantui="";
+        $.ajax({
+                "url": "/tuitime",
+                "type": "POST",
+                "dataType": "json",
+                "async": false,
+                success: function (times) {
+                    qiantui=times.tuitime;
+                    console.log(times.tuitime)
+                }
+            }
+        )
+        var bo=false;
+        if (newDate.getHours()<parseInt(qiantui.substring(0,2))){
+            bo=true;
+        }else if (newDate.getHours()==parseInt(qiantui.substring(0,2))){
+            if(newDate.getMinutes()<parseInt(qiantui.substring(3,5))){
+                bo=true;
+            }
+        }else{
+            bo=false;
+        }
+        if (bo){
+            if (confirm("当前时间未到签退时间,确认要打卡嘛")){
+                qiantui2();
+            }
+        }else{
+            qiantui2();
+        }
+
+
+    }
+    function qiantui2() {
         $.post("/qiantui", function (result) {
             if (result.yi == "今天已签退") {
                 alert("今天已经签退过了孩子!");
@@ -233,8 +267,9 @@
             }
             if (result.qian == "考勤成功") {
                 alert("签退成功");
-            } else {
-                alert("签退成功,但是早退了吧孩子!");
+            } else if(result.qian=="早退"){
+                alert("当前未到签退时间,确定要早退吗?");
+
             }
         }, "json")
     }

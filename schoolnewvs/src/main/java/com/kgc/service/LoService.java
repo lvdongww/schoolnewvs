@@ -21,12 +21,13 @@ public interface LoService {
     int updateWorksIsverify(Works works);//根据works对象修改是否审核
     int insertReply(Reply reply);//插入作业回复
     Releasee selectByRid(int rid);//查询releasee表中rid符合数据的值
+    List<Releasee> selectREByGradeId(List<Integer> integers, int gardeid);//根据班级id查找里面的所有作业
 
     /*试卷*/
     List<ExamItems> selectByepaperid(int id);//根据试卷id查找题目
     ExamPaper selectById(int id);//根据id查找该套题
     int insertexamscore(ExamScore examScore);//插入成绩数据
-    ExamScore selectByUserIdAndPaperId(int userid, int paperid,int papergrade);//通过用户id和试题id查找相对应的成绩
+    ExamScore selectByUserIdAndPaperId(int userid, int paperid, int papergrade);//通过用户id和试题id查找相对应的成绩
     int insertExamScoreDetail(ExamScoreDetail examScoreDetail);//将每次做的题的数据添加到该数据库
     ExamScoreDetail selectByUseridAndScoreid(int shitiid, int paperid);//通过实体id和试题id查找做过的题
     List<ExamPaper> loSelectPaper();//查询试卷
@@ -36,7 +37,7 @@ public interface LoService {
     GradeUser selectGradeUserByUserId(int userid);/*查询该用户属于内个班级*/
     List<PaperGrade> selectPGByGradeId(int gradeid);//根据班级id查询老师发布的任务
     Grade selcetByGradeId(int gradeid);//根据班级id查找班级
-    ExamScore selectByUserIdPaperIdPgid(Integer userid,Integer paperid,Integer pgid);//根据userid paperid pgid 查找ExamScore中对应的数据
+    ExamScore selectByUserIdPaperIdPgid(Integer userid, Integer paperid, Integer pgid);//根据userid paperid pgid 查找ExamScore中对应的数据
 
     /*教员功能*/
     int insertPaperGrade(PaperGrade paperGrade);
@@ -45,8 +46,8 @@ public interface LoService {
     List<GradeUser> selectGUbyGradeId(int gradeid);//根据班级id查找里面有多少学生
     PaperGrade selectBypgid(int pgid);//根据主键查找papergrade表中的数据
     List<Releasee> selectByREGradeId(Integer gradedid);//根据班级id查找该班级所留的 所有作业
-    List<Works> selectByRelid(Integer relid,Integer userid);//根据布置作业的id查找works中信息
-    List<Timetable> selectByGradeId(List<Integer> gradeid,int grade);//根据班级id查找timetable里面该班级的信息
+    List<Works> selectByRelid(Integer relid, Integer userid);//根据布置作业的id查找works中信息
+    List<Timetable> selectByGradeId(List<Integer> gradeid, int grade);//根据班级id查找timetable里面该班级的信息
     Timetable selectByTid(int id);//根据主键查找该timetable里面的数据
     int updateTimeTable(Timetable timetable);//根据主键修改timetable里面的数据
     int insertTimeTable(Timetable timetable);//添加timetable表中的数据

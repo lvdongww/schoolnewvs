@@ -167,9 +167,9 @@ public class DhnLoginController {
         works.setUserid(aid);
         works.setRelid(rid);
         works.setWordate(new Date());
-        String path="";
+        String path = "";
         try {
-            path = ResourceUtils.getURL("classpath:").getPath()+"/static/touxiang";
+            path = ResourceUtils.getURL("classpath:").getPath() + "/static/touxiang";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -294,14 +294,30 @@ public class DhnLoginController {
                     map.put("qian", "考勤成功");
                 }
             } else if (qianh < outh) {
+                map.put("qian", "早退");
                 if (checks.getChtype() == 1) {
                     checks.setRemark("早退");
                     checks.setChtype(2);
                 }
-                map.put("qian", "早退");
+
             }
             dhnService.qiantui(checks);
         }
+        return map;
+    }
+
+    @RequestMapping("tuitime")
+    @ResponseBody
+    public Map<String, Object> tuitime(HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+        Integer aid = (Integer) session.getAttribute("aid");
+        GradeUser gradeUsers = dhnService.selGradeId(aid);
+        //班级id
+        Integer gid = gradeUsers.getGradeid();
+        //根据班级id查询对应班级的时间表
+        Timetable selgtime = dhnService.selgtime(gid);
+        String goutdate = selgtime.getTsignoutdate();
+        map.put("tuitime", goutdate);
         return map;
     }
 
@@ -328,6 +344,7 @@ public class DhnLoginController {
                 apply.setAid(aid);
                 apply.setTeacherid(banid);
                 apply.setApptype(1);
+                apply.setAppdate(new Date());
                 dhnService.qingjia(apply);
             }
         }
