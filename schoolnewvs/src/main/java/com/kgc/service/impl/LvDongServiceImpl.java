@@ -288,5 +288,23 @@ public class LvDongServiceImpl implements LvDongService {
         return applies;
     }
 
+    @Override
+    public List<UserInfo> lvSelectJiao() {
+        AccountExample accountExample=new AccountExample();
+        AccountExample.Criteria criteria = accountExample.createCriteria();
+        criteria.andPosidEqualTo(2);
+        List<Account> accounts = accountMapper.selectByExample(accountExample);
+        List<UserInfo> userInfos=new ArrayList<>();
+        for (Account account : accounts) {
+            UserInfoExample userInfoExample=new UserInfoExample();
+            UserInfoExample.Criteria criteria1 = userInfoExample.createCriteria();
+            criteria1.andAccidEqualTo(account.getAid());
+            criteria1.andUtypeEqualTo(1);
+            List<UserInfo> userInfos1 = userinfoMapper.selectByExample(userInfoExample);
+            userInfos.add(userInfos1.get(0));
+        }
+        return userInfos;
+    }
+
 
 }

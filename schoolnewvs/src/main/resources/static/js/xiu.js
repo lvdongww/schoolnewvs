@@ -77,6 +77,17 @@ function rTime(date) {
     return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 }
 function xiu(a,b,c) {
+    if(c<getNowFormatDate()){
+        var json4={
+            appid:a,
+            apptype:3
+        }
+        console.log("json4"+json4)
+        $.post("/teacher-kx",json4,function (date1) {
+        })
+        alert("过期")
+        return;
+    }
     var json3={
         appid:a,
         apptype: 0
@@ -87,7 +98,6 @@ function xiu(a,b,c) {
 }
 var bo=false;
 function upd(a,b,c) {
-    time=c;
     if(c<getNowFormatDate()){
         var json4={
             appid:a,
@@ -101,13 +111,12 @@ function upd(a,b,c) {
     }
     rTime(c)
     var tempDate=new Date(c.replace(/-/g,"/"));
-    alert(rTime(c))
     var json = {
         apptype: 2,
         appid: a
     }
     $.post("/teacher-kx",json,function (result) {
-        alert("修改成功")
+        alert("同意成功")
         location.href="redirect:/teacher-k"
     })
 
@@ -121,14 +130,9 @@ function upd(a,b,c) {
             chtype: 4
         }
         console.log(json2)
-        if(bo){
             $.post("/teacher-kxi",json2,function (data) {
                 location.href="redirect:/teacher-k"
             })
-        }else {
-            alert("已过期")
-        }
-
     }
 }
 //获取当前系统时间

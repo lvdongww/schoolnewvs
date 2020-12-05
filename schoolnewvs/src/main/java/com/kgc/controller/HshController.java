@@ -219,8 +219,10 @@ public class HshController {
     }
     @RequestMapping("/teacher-kxi")
     @ResponseBody
-    public Map<String,Object> teacherkxi(Checks checks){
+    public Map<String,Object> teacherkxi(Checks checks,HttpSession session){
         Map<String,Object> map=new HashMap<>();
+        Integer aid =(Integer) session.getAttribute("aid");
+        checks.setAid(aid);
         int insapply = hshService.insapply(checks);
         map.put("ins",insapply);
         return map;
@@ -230,7 +232,6 @@ public class HshController {
     public Map<String,Object> student_c(Integer pageIndex,Integer pageSize,Integer aid){
         Map<String,Object> map=new HashMap<>();
         PageInfo<Apply> hshapplysel = hshService.hshapplysel(pageIndex,pageSize,aid);
-        System.out.println("请假"+hshapplysel.toString());
         map.put("data",hshapplysel);
         return map;
     }
@@ -241,18 +242,21 @@ public class HshController {
 
     @RequestMapping("/doaddgrade")
     @ResponseBody
-    public Map<String,Object> doaddgrade(String grade,HttpSession session){
+    public Map<String,Object> doaddgrade(String grade,Integer accid,HttpSession session){
         Map<String,Object> map=new HashMap<>();
         Grade grade2=new Grade();
         grade2.setGname(grade);
         int addgrade = hshService.addgrade(grade2);
         Integer aid =(Integer) session.getAttribute("aid");
         List<Grade> addsel= hshService.addsel(grade2.getGname());
-        System.out.println("id"+addsel.get(0).getGid());
         GradeUser gradeUser=new GradeUser();
         gradeUser.setUserid(aid);
         gradeUser.setGradeid(addsel.get(0).getGid());
+        GradeUser gradeUser1=new GradeUser();
+        gradeUser1.setUserid(accid);
+        gradeUser1.setGradeid(addsel.get(0).getGid());
         int addgradeuser = hshService.addgradeuser(gradeUser);
+        int addgradeuser1 = hshService.addgradeuser(gradeUser1);
         map.put("addgradeuser",addgradeuser);
         return map;
     }

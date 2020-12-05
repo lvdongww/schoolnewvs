@@ -59,4 +59,6 @@ public interface LvDongService {
     PageInfo<UserInfo> lvSelectBenKao(Integer pageIndex, Integer pageSize, Integer gid,String firstDayont,String lastDay);
     //查询本班申请条数
     List<Apply> lvSelectSheng(Integer aid);
+    //查询教员
+    List<UserInfo> lvSelectJiao();
 }

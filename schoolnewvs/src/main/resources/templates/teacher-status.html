@@ -22,9 +22,9 @@
             <th>编号</th>
             <th>学生姓名</th>
             <th>请假留言</th>
-            <th>请假日期</th>
-            <th>请假天数</th>
             <th>申请日期</th>
+            <th>请假天数</th>
+            <th>请假日期</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -35,7 +35,7 @@
             <td th:text="${app.appnei}">未发货</td>
             <td th:text="${#dates.format(app.appdate,'yyyy-MM-dd')}">其他方式</td>
             <td th:text="${app.appcount}+'天
-            '">申通物流
+            '">申通物 流
             </td>
             <td th:text="${#dates.format(app.appcrudate,'yyyy-MM-dd')}">2017-08-17 18:22</td>
             <td th:if="${app.apptype==1}">
@@ -43,7 +43,7 @@
                         th:onclick="upd([[${app.appid}]],[[${app.appcount}]],[[${app.appdate}]]);">同意
                 </button>
                 <button class='layui-btn layui-btn-normal layui-btn-mini cha '
-                        th:onclick="'xiu(\''+${app.appid}+'\',\''+${app.appcount}+'\',\''+${app.teacherid}+'\');'">拒绝
+                        th:onclick="xiu([[${app.appid}]],[[${app.appcount}]],[[${app.appdate}]]);">拒绝
                 </button>
             </td>
             <td th:if="${app.apptype==0}">
@@ -54,6 +54,11 @@
             <td th:if="${app.apptype==2}">
                 <button class='layui-btn layui-btn-normal layui-btn-mini cha '
                       >已同意
+                </button>
+            </td>
+            <td th:if="${app.apptype==3}">
+                <button class='layui-btn layui-btn-normal layui-btn-mini cha '
+                >已过期
                 </button>
             </td>
         </tr>

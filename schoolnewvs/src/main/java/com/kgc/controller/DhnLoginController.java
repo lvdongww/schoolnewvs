@@ -122,8 +122,7 @@ public class DhnLoginController {
             String reltitle = selwork.get(i).getReltitle();
             session.setAttribute("worktitle", reltitle);
             //作业id
-            Integer rid = selwork.get(i).getRid();
-            session.setAttribute("rid", rid);
+
             PageInfo pageInfo = new PageInfo(selwork);
             model.addAttribute("list", pageInfo);
             List<Works> selimg = dhnService.selimg();
@@ -154,7 +153,9 @@ public class DhnLoginController {
     }
 
     @RequestMapping("tijiao")
-    public String tijiao() {
+    public String tijiao(Integer rid,HttpSession session) {
+        session.setAttribute("rid", rid);
+
         return "tijiaozuoye";
     }
 
@@ -169,7 +170,7 @@ public class DhnLoginController {
         works.setWordate(new Date());
         String path = "";
         try {
-            path = ResourceUtils.getURL("classpath:").getPath() + "/static/touxiang";
+            path = ResourceUtils.getURL("classpath:").getPath() + "/static/homeworkpicture";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

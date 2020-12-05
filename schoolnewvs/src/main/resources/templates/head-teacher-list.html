@@ -8,13 +8,18 @@
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
     <link rel="stylesheet" href="/static/css/font.css">
     <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/js/xadmin.js"></script>
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 </head>
 <body>
 <div class="layui-card-body">
-   班级名称： <input type="text" name="gname" class="layui-input name" onblur="yichu()" style="width: 20%;display: inline-block"><button class="layui-btn " onclick="add()" style="margin-left: 20px;">添加</button>
+   班级名称： <input type="text" name="gname" class="layui-input name" onblur="yichu()" style="width: 20%;display: inline-block">
+    任课教员：<select style="width: 200px;display: inline-block;" class="form-control jiao"  name="banji">
+            <option value="0">请选择任课教员</option>
+            </select>
+    <button class="layui-btn " onclick="add()" style="margin-left: 20px;">添加</button>
     <table class="layui-table layui-form table-a">
         <tr>
             <th>ID</th>
@@ -29,11 +34,17 @@
     var bo=false;
     function add() {
         var name=$(".name").val();
+        var accid=$(".jiao").val();
         var json={
-            "grade":name
+            "grade":name,
+            "accid":accid
         }
         if(name==""){
             alert("请输入班级名称");
+            return;
+        }
+        if(accid==0){
+            alert("请选择任课教员");
             return;
         }
         if(bo){
@@ -50,6 +61,7 @@
         }
     }
     function cha() {
+        $(".table-a tr:gt(0)").remove();
         $.ajax({
             type:"GET",
             url:"/hshsel2",
@@ -68,7 +80,15 @@
     }
     $(document).ready(function () {
        cha();
+       $.post("/lvSelJiao",function (result) {
+          console.log(result.data)
+           $.each(result.data,function (i,v) {
+                var $op=$("<option value='"+v.accid+"'>"+v.nickname+"</option>");
+                $(".jiao").append($op);
+           })
+       },"json");
     })
+
     function yichu() {
         var name=$(".name").val();
            var json={

@@ -521,4 +521,12 @@ public class ChitchatController {
         map.put("data",applies.size());
         return map;
     }
+    @RequestMapping("/lvSelJiao")
+    @ResponseBody
+    public Map<String,Object> lvSelJiao(){
+        Map<String,Object> map=new HashMap<>();
+        List<UserInfo> userInfos = service.lvSelectJiao();
+        map.put("data",userInfos);
+        return map;
+    }
 }
