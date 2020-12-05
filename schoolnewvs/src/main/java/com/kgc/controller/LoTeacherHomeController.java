@@ -1,17 +1,13 @@
 package com.kgc.controller;
 
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleDataTypeIntervalYear;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kgc.pojo.*;
 import com.kgc.service.LoService;
 import com.kgc.service.LvDongService;
 
-import com.sun.corba.se.spi.ior.ObjectKey;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,15 +17,12 @@ import javax.annotation.Resource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.sound.midi.Soundbank;
 
-import java.sql.Time;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+import static com.kgc.weather.TestWeather.getWeather;
 @Controller
 public class LoTeacherHomeController {
 
@@ -1001,6 +994,20 @@ public class LoTeacherHomeController {
     @RequestMapping("/todostukaoshi")
     public String todostukaoshi() {
         return "dostukaoshi";
+    }
+
+    //天气
+    @RequestMapping("/toWeather")
+    public String toWeather(){
+        return "Weather";
+    }
+    @RequestMapping("/getWeather")
+    @ResponseBody
+    public Map<String,Object> selectresult2(){
+        Map<String,Object>map=new HashMap<>();
+        SkWeather weather = getWeather();
+        map.put("o",weather);
+        return map;
     }
 
 
